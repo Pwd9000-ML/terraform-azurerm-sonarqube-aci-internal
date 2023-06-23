@@ -36,7 +36,7 @@ variable "vnet_address_space" {
 variable "subnet_config" {
   type = list(object({
     subnet_name       = string
-    address_prefixes  = list(string)
+    subnet_address_space  = list(string)
     service_endpoints = list(string)
   }))
   default = [
