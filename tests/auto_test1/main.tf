@@ -48,12 +48,11 @@ resource "azurerm_subnet" "resource_subnets" {
   service_endpoints                             = each.value.service_endpoints
   private_endpoint_network_policies_enabled     = false
   private_link_service_network_policies_enabled = false
-  tags                                          = var.tags
 }
 
 ### Subnet to deploy the container group into - Delegated to ACI
 resource "azurerm_subnet" "sonarqube_sub_del" {
-  for_each             = { for each in var.subnet_config_delegated : each.subnet_name => each }
+  for_each             = { for each in var.subnet_config_delegated_aci : each.subnet_name => each }
   name                 = "${each.value.subnet_name}-${random_integer.number.result}"
   resource_group_name  = azurerm_resource_group.sonarqube_rg.name
   virtual_network_name = azurerm_virtual_network.sonarqube_vnet.name
@@ -67,7 +66,6 @@ resource "azurerm_subnet" "sonarqube_sub_del" {
       actions = each.value.delegation_ations
     }
   }
-  tags = var.tags
 }
 
 ## Private DNS Zones for resources deployed into the VNET
