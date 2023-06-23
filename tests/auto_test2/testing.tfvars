@@ -1,0 +1,1 @@
+resresource_group_name = "Terraform-Sonarqube-internal-aci-test"
