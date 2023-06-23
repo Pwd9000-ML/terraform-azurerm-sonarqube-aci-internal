@@ -81,6 +81,6 @@ variable "subnet_config_delegated_aci" {
 
 variable "private_dns_zones" {
   type        = list(string)
-  default     = ["privatelink.vaultcore.azure.net"]
+  default     = ["privatelink.vaultcore.azure.net", "privatelink.blob.core.windows.net", "private.database.windows.net"]
   description = "Private DNS zones to create."
 }

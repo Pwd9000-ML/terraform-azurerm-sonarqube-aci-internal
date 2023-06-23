@@ -14,7 +14,7 @@ provider "azurerm" {
 }
 
 ###################################################
-# PRE-REQS (Create RG, VNET and Delegated Subnet) #
+# PRE-REQS (RG, VNET, Subs, Delegated Subs, DNS)  #
 ###################################################
 ### Random integer to generate unique names
 resource "random_integer" "number" {
@@ -22,14 +22,14 @@ resource "random_integer" "number" {
   max = 9999
 }
 
-### Resource group to deploy the module
+### Resource group to deploy the module prerequisite resources into
 resource "azurerm_resource_group" "sonarqube_rg" {
   name     = var.resource_group_name
   location = var.location
   tags     = var.tags
 }
 
-### Virtual network to deploy the container group into
+### Virtual network to deploy the container group and prerequisite resources into
 resource "azurerm_virtual_network" "sonarqube_vnet" {
   name                = "${var.virtual_network_name}-${random_integer.number.result}"
   location            = azurerm_resource_group.sonarqube_rg.location
@@ -38,7 +38,7 @@ resource "azurerm_virtual_network" "sonarqube_vnet" {
   tags                = var.tags
 }
 
-# Subnets required for resources to be deployed + Service Endpoints
+# Subnets required for resources to be deployed + Service Endpoints (Storage, SQL, KeyVault)
 resource "azurerm_subnet" "resource_subnets" {
   for_each                                      = { for each in var.subnet_config : each.subnet_name => each }
   resource_group_name                           = azurerm_resource_group.sonarqube_rg.name
@@ -70,7 +70,7 @@ resource "azurerm_subnet" "sonarqube_sub_del" {
   }
 }
 
-## Private DNS Zones for resources deployed into the VNET
+## Private DNS Zones for resources deployed into the VNET (Storage, SQL, KeyVault)
 resource "azurerm_private_dns_zone" "private_dns_zones" {
   for_each            = toset(var.private_dns_zones)
   name                = each.key
