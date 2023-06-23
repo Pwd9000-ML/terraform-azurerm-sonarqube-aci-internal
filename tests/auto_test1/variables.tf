@@ -35,15 +35,19 @@ variable "vnet_address_space" {
 
 variable "subnet_config" {
   type = list(object({
-    subnet_name          = string
-    subnet_address_space = list(string)
-    service_endpoints    = list(string)
+    subnet_name                                   = string
+    subnet_address_space                          = list(string)
+    service_endpoints                             = list(string)
+    private_endpoint_network_policies_enabled     = bool
+    private_link_service_network_policies_enabled = bool
   }))
   default = [
     {
-      subnet_name          = "sonarqube-resource-sub"
-      subnet_address_space = ["10.3.0.0/24"]
-      service_endpoints    = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.KeyVault"]
+      subnet_name                                   = "sonarqube-resource-sub"
+      subnet_address_space                          = ["10.3.0.0/24"]
+      service_endpoints                             = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.KeyVault"]
+      private_endpoint_network_policies_enabled     = false
+      private_link_service_network_policies_enabled = false
     }
   ]
   description = "A list of subnet configuration objects to create subnets in the virtual network."
@@ -51,21 +55,25 @@ variable "subnet_config" {
 
 variable "subnet_config_delegated_aci" {
   type = list(object({
-    subnet_name          = string
-    subnet_address_space = list(string)
-    service_endpoints    = list(string)
-    delegation_name      = string
-    delegation_service   = string
-    delegation_ations    = list(string)
+    subnet_name                                   = string
+    subnet_address_space                          = list(string)
+    service_endpoints                             = list(string)
+    private_endpoint_network_policies_enabled     = bool
+    private_link_service_network_policies_enabled = bool
+    delegation_name                               = string
+    delegation_service                            = string
+    delegation_ations                             = list(string)
   }))
   default = [
     {
-      subnet_name          = "sonarqube-delegated-sub"
-      subnet_address_space = ["10.3.1.0/24"]
-      service_endpoints    = [""]
-      delegation_name      = "aci-sub-delegation"
-      delegation_service   = "Microsoft.ContainerInstance/containerGroups"
-      delegation_ations    = ["Microsoft.Network/virtualNetworks/subnets/action"]
+      subnet_name                                   = "sonarqube-delegated-sub"
+      subnet_address_space                          = ["10.3.1.0/24"]
+      service_endpoints                             = []
+      private_endpoint_network_policies_enabled     = false
+      private_link_service_network_policies_enabled = false
+      delegation_name                               = "aci-sub-delegation"
+      delegation_service                            = "Microsoft.ContainerInstance/containerGroups"
+      delegation_ations                             = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   ]
   description = "A list of subnet configuration objects to create subnets in the virtual network. - delegated to ACI"
