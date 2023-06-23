@@ -1,6 +1,6 @@
 variable "resource_group_name" {
   type        = string
-  default     = ""
+  default     = "Terraform-Sonarqube-internal-aci-test"
   description = "Name of the resource group to create where resources will be hosted."
 }
 
@@ -11,8 +11,13 @@ variable "location" {
 }
 
 variable "tags" {
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {
+    Terraform   = "True"
+    Description = "Sonarqube VNET integrated aci with caddy (self signed cert)."
+    Author      = "Marcel Lupo"
+    GitHub      = "https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal"
+  }
   description = "A map of key value pairs that is used to tag resources created."
 }
 
