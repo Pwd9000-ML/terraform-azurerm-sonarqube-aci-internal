@@ -176,100 +176,124 @@ variable "mssql_config" {
 }
 
 variable "mssql_fw_rules" {
-  type = list(list(string))
-  default = [["AllowAll", "0.0.0.0", "0.0.0.0"]]
+  type        = list(list(string))
+  default     = [["AllowAll", "0.0.0.0", "0.0.0.0"]]
   description = "List of SQL firewall rules in format: [[rule1, startIP, endIP],[rule2, startIP, endIP]] etc."
 }
 
-# ###MSSQL Database###
-# variable "mssql_db_config" {
-#   type = object({
-#     db_name                     = string
-#     collation                   = string
-#     create_mode                 = string
-#     license_type                = string
-#     max_size_gb                 = number
-#     min_capacity                = number
-#     auto_pause_delay_in_minutes = number
-#     read_scale                  = bool
-#     sku_name                    = string
-#     storage_account_type        = string
-#     zone_redundant              = bool
-#     point_in_time_restore_days  = number
-#     backup_interval_in_hours    = number
-#   })
-#   default = {
-#     db_name                     = "sonarqubemssqldb9000"
-#     collation                   = "SQL_Latin1_General_CP1_CS_AS"
-#     create_mode                 = "Default"
-#     license_type                = null
-#     max_size_gb                 = 128
-#     min_capacity                = 1
-#     auto_pause_delay_in_minutes = 60
-#     read_scale                  = false
-#     sku_name                    = "GP_S_Gen5_2"
-#     storage_account_type        = "Zone"
-#     zone_redundant              = false
-#     point_in_time_restore_days  = 7
-#     backup_interval_in_hours    = 24
-#   }
-#   description = "MSSQL database configuration object to create persistent azure SQL db for sonarqube aci."
-# }
+###MSSQL Database###
+variable "mssql_db_config" {
+  type = object({
+    db_name                     = string
+    collation                   = string
+    create_mode                 = string
+    license_type                = string
+    max_size_gb                 = number
+    min_capacity                = number
+    auto_pause_delay_in_minutes = number
+    read_scale                  = bool
+    sku_name                    = string
+    storage_account_type        = string
+    zone_redundant              = bool
+    point_in_time_restore_days  = number
+    backup_interval_in_hours    = number
+  })
+  default = {
+    db_name                     = "sonarqubemssqldb9000"
+    collation                   = "SQL_Latin1_General_CP1_CS_AS"
+    create_mode                 = "Default"
+    license_type                = null
+    max_size_gb                 = 128
+    min_capacity                = 1
+    auto_pause_delay_in_minutes = 60
+    read_scale                  = false
+    sku_name                    = "GP_S_Gen5_2"
+    storage_account_type        = "Zone"
+    zone_redundant              = false
+    point_in_time_restore_days  = 7
+    backup_interval_in_hours    = 24
+  }
+  description = "MSSQL database configuration object to create persistent azure SQL db for sonarqube aci."
+}
 
-# ###Container Group - ACIs###
-# variable "aci_dns_label" {
-#   type        = string
-#   description = "DNS label to assign onto the Azure Container Group."
-#   nullable    = false
-# }
+###Container Group - ACIs###
+#variable "aci_dns_label" {
+#  type        = string
+#  description = "DNS label to assign onto the Azure Container Group."
+#  nullable    = false
+#}
 
-# variable "aci_group_config" {
-#   type = object({
-#     container_group_name = string
-#     ip_address_type      = string
-#     os_type              = string
-#     restart_policy       = string
-#   })
-#   description = "Container group configuration object to create sonarqube aci with caddy reverse proxy."
-#   nullable    = false
-# }
+variable "aci_group_config" {
+  type = object({
+    container_group_name = string
+    ip_address_type      = string
+    os_type              = string
+    restart_policy       = string
+  })
+  default = {
+    container_group_name = "sonarqubeaci9000"
+    ip_address_type      = "Private"
+    os_type              = "Linux"
+    restart_policy       = "Never"
+  }
+  description = "Container group configuration object to create sonarqube aci with caddy reverse proxy."
+  nullable    = false
+}
 
-# variable "sonar_config" {
-#   type = object({
-#     container_name                  = string
-#     container_image                 = string
-#     container_cpu                   = number
-#     container_memory                = number
-#     container_environment_variables = map(string)
-#     container_commands              = list(string)
-#   })
-#   default = {
-#     container_name                  = "sonarqube-server"
-#     container_image                 = "sonarqube:lts-community" #Check for more versions/tags here: https://hub.docker.com/_/sonarqube
-#     container_cpu                   = 2
-#     container_memory                = 8
-#     container_environment_variables = null
-#     container_commands              = []
-#   }
-#   description = "Sonarqube container configuration object to create sonarqube aci."
-# }
+variable "sonar_config" {
+  type = object({
+    container_name                  = string
+    container_image                 = string
+    container_cpu                   = number
+    container_memory                = number
+    container_environment_variables = map(string)
+    container_commands              = list(string)
+  })
+  default = {
+    container_name                  = "sonarqube-server"
+    container_image                 = "sonarqube:lts-community" #Check for more versions/tags here: https://hub.docker.com/_/sonarqube
+    container_cpu                   = 2
+    container_memory                = 8
+    container_environment_variables = null
+    container_commands              = []
+  }
+  description = "Sonarqube container configuration object to create sonarqube aci."
+}
 
-# variable "caddy_config" {
-#   type = object({
-#     container_name                  = string
-#     container_image                 = string
-#     container_cpu                   = number
-#     container_memory                = number
-#     container_environment_variables = map(string)
-#     container_commands              = list(string)
-#   })
-#   default = {
-#     container_name                  = "caddy-reverse-proxy"
-#     container_image                 = "caddy:latest" #Check for more versions/tags here: https://hub.docker.com/_/caddy
-#     container_cpu                   = 1
-#     container_memory                = 1
-#     container_environment_variables = null
-#     container_commands              = ["caddy", "reverse-proxy", "--from", "custom.domain.com", "--to", "localhost:9000"]
-#   }
-#   description = "Caddy container configuration object to create caddy reverse proxy aci."
-# }
+variable "caddy_config" {
+  type = object({
+    container_name                  = string
+    container_image                 = string
+    container_cpu                   = number
+    container_memory                = number
+    container_environment_variables = map(string)
+    container_commands              = list(string)
+  })
+  default = {
+    container_name                  = "caddy-reverse-proxy"
+    container_image                 = "caddy:latest" #Check for more versions/tags here: https://hub.docker.com/_/caddy
+    container_cpu                   = 1
+    container_memory                = 1
+    container_environment_variables = null
+    container_commands              = ["caddy", "reverse-proxy", "--from", "custom.domain.local", "--to", "localhost:9000", "--internal-certs"]
+  }
+  description = "Caddy container configuration object to create caddy reverse proxy aci - internal certs (self signed)."
+}
+
+variable "aci_private_dns_record" {
+  type        = bool
+  default     = false
+  description = "Create private dns record for aci in '.local' Azure private DNS zone. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) If false, add private IP to hosts file to resolve aci private dns record: 'custom.domain.local'."
+}
+
+variable "local_dns_zone_name" {
+  type        = string
+  default     = "pwd9000.local"
+  description = "Private Azure dns zone for '.local' to add aci private dns record. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) Otherwise use hosts file to resolve aci private dns record: 'custom.domain.local'."
+}
+
+variable "sonarqube_private_dns_record" {
+  type        = string
+  default     = "sonar"
+  description = "Private dns record for sonarqube aci. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) Otherwise use hosts file to resolve aci private dns record: 'custom.domain.local'."
+}

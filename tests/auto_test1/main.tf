@@ -134,20 +134,23 @@ module "sonarcube-aci-internal" {
   }
   mssql_fw_rules = [["AllowAll", "0.0.0.0", "0.0.0.0"]] #for testing purposes only - allow all IPs
 
-  #   aci_group_config = {
-  #     container_group_name = "sonarqubeaci${random_integer.number.result}"
-  #     ip_address_type      = "Public"
-  #     os_type              = "Linux"
-  #     restart_policy       = "OnFailure"
-  #   }
-  #   aci_dns_label = "sonarqube-aci-${random_integer.number.result}"
-  #   caddy_config = {
-  #     container_name                  = "caddy-reverse-proxy"
-  #     container_image                 = "caddy:latest" #Check for more versions/tags here: https://hub.docker.com/_/caddy
-  #     container_cpu                   = 1
-  #     container_memory                = 1
-  #     container_environment_variables = null
-  #     container_commands              = ["caddy", "reverse-proxy", "--from", "sonar.pwd9000.local", "--to", "localhost:9000", "--internal-certs"]
-  #   }
-  tags = var.tags
+  aci_group_config = {
+    container_group_name = "sonarqubeaci${random_integer.number.result}"
+    ip_address_type      = "Private"
+    os_type              = "Linux"
+    restart_policy       = "Never"
+  }
+  #aci_dns_label = "sonarqube-aci-${random_integer.number.result}"
+  caddy_config = {
+    container_name                  = "caddy-reverse-proxy"
+    container_image                 = "caddy:latest" #Check for more versions/tags here: https://hub.docker.com/_/caddy
+    container_cpu                   = 1
+    container_memory                = 1
+    container_environment_variables = null
+    container_commands              = ["caddy", "reverse-proxy", "--from", "sonar.pwd9000.local", "--to", "localhost:9000", "--internal-certs"]
+  }
+  tags                         = var.tags
+  aci_private_dns_record       = true
+  local_dns_zone_name          = "pwd9000.local"
+  sonarqube_private_dns_record = "sonar"
 }

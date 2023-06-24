@@ -20,7 +20,7 @@ resource "azurerm_key_vault" "sonarqube_kv" {
       virtual_network_subnet_ids = network_acls.value.virtual_network_subnet_ids
     }
   }
-  tags      = var.tags
+  tags = var.tags
 }
 
 #Private Endpoint for keyvault
@@ -113,14 +113,14 @@ resource "azurerm_key_vault_secret" "password_secret" {
   name         = "sonarq-mssql-sa-password"
   value        = random_password.sql_admin_password.result
   key_vault_id = azurerm_key_vault.sonarqube_kv.id
-  depends_on = [azurerm_role_assignment.kv_role_assigment]
+  depends_on   = [azurerm_role_assignment.kv_role_assigment]
 }
 
 resource "azurerm_key_vault_secret" "username_secret" {
   name         = "sonarq-mssql-sa-username"
   value        = var.sql_admin_username
   key_vault_id = azurerm_key_vault.sonarqube_kv.id
-  depends_on = [azurerm_role_assignment.kv_role_assigment]
+  depends_on   = [azurerm_role_assignment.kv_role_assigment]
 }
 
 #Create MSSQL server instance
@@ -167,80 +167,91 @@ resource "azurerm_mssql_virtual_network_rule" "mssql_vnet_rule" {
 }
 
 # ###MSSQL Database###
-# resource "azurerm_mssql_database" "sonarqube_mssql_db" {
-#   server_id = azurerm_mssql_server.sonarqube_mssql.id
-#   #values from variable mssql_db_config object
-#   name                        = lower(var.mssql_db_config.db_name)
-#   collation                   = var.mssql_db_config.collation
-#   create_mode                 = var.mssql_db_config.create_mode
-#   license_type                = var.mssql_db_config.license_type
-#   max_size_gb                 = var.mssql_db_config.max_size_gb
-#   min_capacity                = var.mssql_db_config.min_capacity
-#   auto_pause_delay_in_minutes = var.mssql_db_config.auto_pause_delay_in_minutes
-#   read_scale                  = var.mssql_db_config.read_scale
-#   sku_name                    = var.mssql_db_config.sku_name
-#   storage_account_type        = var.mssql_db_config.storage_account_type
-#   zone_redundant              = var.mssql_db_config.zone_redundant
-#   short_term_retention_policy {
-#     retention_days           = var.mssql_db_config.point_in_time_restore_days
-#     backup_interval_in_hours = var.mssql_db_config.backup_interval_in_hours
-#   }
-#   tags = var.tags
-# }
+resource "azurerm_mssql_database" "sonarqube_mssql_db" {
+  server_id = azurerm_mssql_server.sonarqube_mssql.id
+  #values from variable mssql_db_config object
+  name                        = lower(var.mssql_db_config.db_name)
+  collation                   = var.mssql_db_config.collation
+  create_mode                 = var.mssql_db_config.create_mode
+  license_type                = var.mssql_db_config.license_type
+  max_size_gb                 = var.mssql_db_config.max_size_gb
+  min_capacity                = var.mssql_db_config.min_capacity
+  auto_pause_delay_in_minutes = var.mssql_db_config.auto_pause_delay_in_minutes
+  read_scale                  = var.mssql_db_config.read_scale
+  sku_name                    = var.mssql_db_config.sku_name
+  storage_account_type        = var.mssql_db_config.storage_account_type
+  zone_redundant              = var.mssql_db_config.zone_redundant
+  short_term_retention_policy {
+    retention_days           = var.mssql_db_config.point_in_time_restore_days
+    backup_interval_in_hours = var.mssql_db_config.backup_interval_in_hours
+  }
+  tags = var.tags
+}
 
-# ###Container Group - ACIs###
-# resource "azurerm_container_group" "sonarqube_aci" {
-#   resource_group_name = var.create_rg ? tostring(azurerm_resource_group.sonarqube_rg[0].name) : tostring(data.azurerm_resource_group.sonarqube_rg[0].name)
-#   location            = var.create_rg ? tostring(azurerm_resource_group.sonarqube_rg[0].location) : tostring(data.azurerm_resource_group.sonarqube_rg[0].location)
-#   dns_name_label      = var.aci_dns_label
-#   #values from variable aci_group_config object
-#   name            = lower(var.aci_group_config.container_group_name)
-#   ip_address_type = var.aci_group_config.ip_address_type
-#   os_type         = var.aci_group_config.os_type
-#   restart_policy  = var.aci_group_config.restart_policy
-#   tags            = var.tags
+###Container Group - ACIs###
+resource "azurerm_container_group" "sonarqube_aci_private" {
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  #dns_name_label      = var.aci_dns_label
+  #values from variable aci_group_config object
+  name            = lower(var.aci_group_config.container_group_name)
+  ip_address_type = var.aci_group_config.ip_address_type
+  os_type         = var.aci_group_config.os_type
+  restart_policy  = var.aci_group_config.restart_policy
+  tags            = var.tags
 
-#   #Sonarqube container
-#   container {
-#     name                         = var.sonar_config.container_name
-#     image                        = var.sonar_config.container_image
-#     cpu                          = var.sonar_config.container_cpu
-#     memory                       = var.sonar_config.container_memory
-#     environment_variables        = var.sonar_config.container_environment_variables
-#     secure_environment_variables = local.sonar_sec_vars
-#     commands                     = var.sonar_config.container_commands
-#     ports {
-#       port     = 9000
-#       protocol = "TCP"
-#     }
-#     dynamic "volume" {
-#       for_each = var.shares_config
-#       content {
-#         name                 = volume.value.share_name
-#         mount_path           = "/opt/sonarqube/${volume.value.share_name}"
-#         share_name           = volume.value.share_name
-#         storage_account_name = azurerm_storage_account.sonarqube_sa.name
-#         storage_account_key  = azurerm_storage_account.sonarqube_sa.primary_access_key
-#       }
-#     }
-#   }
+  #Sonarqube container
+  container {
+    name                         = var.sonar_config.container_name
+    image                        = var.sonar_config.container_image
+    cpu                          = var.sonar_config.container_cpu
+    memory                       = var.sonar_config.container_memory
+    environment_variables        = var.sonar_config.container_environment_variables
+    secure_environment_variables = local.sonar_sec_vars
+    commands                     = var.sonar_config.container_commands
+    ports {
+      port     = 9000
+      protocol = "TCP"
+    }
+    dynamic "volume" {
+      for_each = var.shares_config
+      content {
+        name                 = volume.value.share_name
+        mount_path           = "/opt/sonarqube/${volume.value.share_name}"
+        share_name           = volume.value.share_name
+        storage_account_name = azurerm_storage_account.sonarqube_sa.name
+        storage_account_key  = azurerm_storage_account.sonarqube_sa.primary_access_key
+      }
+    }
+  }
 
-#   #Caddy container
-#   container {
-#     name                  = var.caddy_config.container_name
-#     image                 = var.caddy_config.container_image
-#     cpu                   = var.caddy_config.container_cpu
-#     memory                = var.caddy_config.container_memory
-#     environment_variables = var.caddy_config.container_environment_variables
-#     commands              = var.caddy_config.container_commands
-#     ports {
-#       port     = 443
-#       protocol = "TCP"
-#     }
-#     ports {
-#       port     = 80
-#       protocol = "TCP"
-#     }
-#   }
-#   depends_on = [azurerm_storage_share_file.sonar_properties]
-# }
+  #Caddy container
+  container {
+    name                  = var.caddy_config.container_name
+    image                 = var.caddy_config.container_image
+    cpu                   = var.caddy_config.container_cpu
+    memory                = var.caddy_config.container_memory
+    environment_variables = var.caddy_config.container_environment_variables
+    commands              = var.caddy_config.container_commands
+    ports {
+      port     = 443
+      protocol = "TCP"
+    }
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
+  }
+  subnet_ids = [data.azurerm_subnet.delegated_subnet_aci.id]
+  depends_on = [azurerm_storage_share_file.sonar_properties]
+}
+
+# Add private IP of ACI to private DNS zone
+resource "azurerm_private_dns_a_record" "example" {
+  count               = var.aci_private_dns_record ? 1 : 0
+  name                = var.sonarqube_private_dns_record
+  zone_name           = var.local_dns_zone_name
+  resource_group_name = var.network_resource_group_name
+  ttl                 = 300
+  records             = ["${azurerm_container_group.sonarqube_aci_private.ip_address}"]
+}
