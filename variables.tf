@@ -26,6 +26,31 @@ variable "resource_group_name" {
   description = "Name of the resource group where resources will be hosted."
 }
 
+###Networking###
+variable "network_resource_group_name" {
+  type        = string
+  default     = "Terraform-Sonarqube-aci-interal"
+  description = "Name of the resource group where networking resources are hosted (if different from resource group hoting ACI)."
+}
+
+variable "virtual_network_name" {
+  type        = string
+  default     = "sonarqube-int-vnet"
+  description = "Name of the virtual network where resources are attached."
+}
+
+variable "resource_subnet_name" {
+  type        = string
+  default     = "sonarqube-resource-sub"
+  description = "The name for the resource subnet, used in data source to get subnet ID."
+}
+
+variable "delegated_subnet_name" {
+  type        = string
+  default     = "sonarqube-delegated-sub"
+  description = "The name for the aci delegated subnet, used in data source to get subnet ID."
+}
+
 ###Key Vault###
 variable "kv_config" {
   type = object({
@@ -52,6 +77,16 @@ variable "sa_config" {
     min_tls_version           = string
     is_hns_enabled            = bool
   })
+    default = {
+        name                      = "sonarqubesa9000"
+        account_kind              = "StorageV2"
+        account_tier              = "Standard"
+        account_replication_type  = "LRS"
+        access_tier               = "Hot"
+        enable_https_traffic_only = true
+        min_tls_version           = "TLS1_2"
+        is_hns_enabled            = false
+    }
   description = "Storage configuration object to create persistent azure file shares for sonarqube aci."
   nullable    = false
 }
@@ -79,7 +114,7 @@ variable "shares_config" {
       quota_gb   = 1
     }
   ]
-  description = "Sonarqube file shares"
+  description = "Sonarqube file shares."
 }
 
 ###Azure SQL Server###
