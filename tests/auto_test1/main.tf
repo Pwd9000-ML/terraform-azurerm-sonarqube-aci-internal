@@ -77,7 +77,15 @@ resource "azurerm_private_dns_zone" "private_dns_zones" {
   resource_group_name = azurerm_resource_group.sonarqube_rg.name
   tags                = var.tags
 }
-
+## Link Private DNS Zones to VNET
+resource "azurerm_private_dns_zone_virtual_network_link" "vnet-link" {
+  for_each              = toset(var.private_dns_zones)
+  name                  = "${each.key}-net-link"
+  resource_group_name   = azurerm_resource_group.sonarqube_rg.name
+  private_dns_zone_name = azurerm_private_dns_zone.private_dns_zones[each.key].name
+  virtual_network_id    = azurerm_virtual_network.sonarqube_vnet.id
+  tags                  = var.tags
+}
 
 ##################################################
 # MODULE TO TEST                                 #
@@ -120,11 +128,12 @@ module "sonarcube-aci-internal" {
   storage_firewall_allowed_ips    = ["0.0.0.0/0"] #for testing purposes only - allow all IPs
 
   #msSql Server + Databases
+  mssql_config = {
+    name    = "sonarqubemssql${random_integer.number.result}"
+    version = "12.0"
+  }
+  mssql_fw_rules = [["AllowAll", "0.0.0.0", "0.0.0.0"]] #for testing purposes only - allow all IPs
 
-  #   mssql_config = {
-  #     name    = "sonarqubemssql${random_integer.number.result}"
-  #     version = "12.0"
-  #   }
   #   aci_group_config = {
   #     container_group_name = "sonarqubeaci${random_integer.number.result}"
   #     ip_address_type      = "Public"

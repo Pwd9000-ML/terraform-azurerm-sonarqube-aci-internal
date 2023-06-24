@@ -20,6 +20,14 @@ locals {
     private_dns_zone_ids = [data.azurerm_private_dns_zone.storage.id]
   }]
 
+  ## locals config for mssql server private endpoint ##
+  loc_private_dns_zone_group_mssql = [{
+    enabled              = true
+    name                 = "privatelink.database.windows.net"
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.mssql.id]
+  }]
+
+
   ## locals config for keyvault firewall rules ##
   kv_net_rules = [
     {

@@ -153,35 +153,33 @@ variable "storage_firewall_allowed_ips" {
   description = "value of storage firewall allowed ip rules."
 }
 
-# ###Azure SQL Server###
-# variable "pass_length" {
-#   type        = number
-#   default     = 24
-#   description = "Password length for sql admin creds. (Stored in sonarqube key vault)"
-# }
+###Azure SQL Server###
+variable "pass_length" {
+  type        = number
+  default     = 24
+  description = "Password length for sql admin creds. (Stored in sonarqube key vault)"
+}
 
-# variable "sql_admin_username" {
-#   type        = string
-#   default     = "Sonar-Admin"
-#   description = "Username for sql admin creds. (Stored in sonarqube key vault)"
-# }
+variable "sql_admin_username" {
+  type        = string
+  default     = "Sonar-Admin"
+  description = "Username for sql admin creds. (Stored in sonarqube key vault)"
+}
 
-# variable "mssql_config" {
-#   type = object({
-#     name    = string
-#     version = string
-#   })
-#   description = "MSSQL configuration object to create persistent SQL server instance for sonarqube aci."
-#   nullable    = false
-# }
+variable "mssql_config" {
+  type = object({
+    name    = string
+    version = string
+  })
+  description = "MSSQL configuration object to create persistent SQL server instance for sonarqube aci."
+  nullable    = false
+}
 
-# variable "mssql_fw_rules" {
-#   type = list(list(string))
-#   default = [
-#     ["Allow All Azure IPs", "0.0.0.0", "0.0.0.0"]
-#   ]
-#   description = "List of SQL firewall rules in format: [[rule1, startIP, endIP],[rule2, startIP, endIP]] etc."
-# }
+variable "mssql_fw_rules" {
+  type = list(list(string))
+  default = [["AllowAll", "0.0.0.0", "0.0.0.0"]]
+  description = "List of SQL firewall rules in format: [[rule1, startIP, endIP],[rule2, startIP, endIP]] etc."
+}
 
 # ###MSSQL Database###
 # variable "mssql_db_config" {

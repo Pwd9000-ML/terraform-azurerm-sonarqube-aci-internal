@@ -28,3 +28,9 @@ data "azurerm_private_dns_zone" "storage" {
   resource_group_name = var.network_resource_group_name
   depends_on          = [azurerm_storage_account.sonarqube_sa]
 }
+
+data "azurerm_private_dns_zone" "mssql" {
+  name                = "privatelink.database.windows.net"
+  resource_group_name = var.network_resource_group_name
+  depends_on          = [azurerm_mssql_server.sonarqube_mssql]  
+}

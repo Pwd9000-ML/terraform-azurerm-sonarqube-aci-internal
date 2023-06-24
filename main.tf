@@ -46,7 +46,7 @@ resource "azurerm_role_assignment" "kv_role_assigment" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
-###Storage Account###
+###Storage Account and file shares for ACI persistent file storage.###
 resource "azurerm_storage_account" "sonarqube_sa" {
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -71,14 +71,14 @@ resource "azurerm_storage_account" "sonarqube_sa" {
   tags = var.tags
 }
 
-#Sonarqube shares
+#Sonarqube file shares
 resource "azurerm_storage_share" "sonarqube" {
   for_each             = { for each in var.shares_config : each.share_name => each }
   name                 = each.value.share_name
   quota                = each.value.quota_gb
   storage_account_name = azurerm_storage_account.sonarqube_sa.name
 }
-#Upload config file
+#Upload sonarqube config file
 resource "azurerm_storage_share_file" "sonar_properties" {
   name             = "sonar.properties"
   storage_share_id = azurerm_storage_share.sonarqube["conf"].id
@@ -100,49 +100,71 @@ module "private_endpoint_sa" {
   tags                            = var.tags
 }
 
-# ###Azure SQL Server###
-# #Random Password
-# resource "random_password" "sql_admin_password" {
-#   length           = var.pass_length
-#   special          = true
-#   override_special = "/@\" "
-# }
-# #Add SQL admin Password and Username to Keyvault
-# resource "azurerm_key_vault_secret" "password_secret" {
-#   name         = "sonarq-sa-password"
-#   value        = random_password.sql_admin_password.result
-#   key_vault_id = azurerm_key_vault.sonarqube_kv.id
-#   depends_on = [
-#     azurerm_role_assignment.kv_role_assigment
-#   ]
-# }
-# resource "azurerm_key_vault_secret" "username_secret" {
-#   name         = "sonarq-sa-username"
-#   value        = var.sql_admin_username
-#   key_vault_id = azurerm_key_vault.sonarqube_kv.id
-#   depends_on = [
-#     azurerm_role_assignment.kv_role_assigment
-#   ]
-# }
-# #Create MSSQL server instance
-# resource "azurerm_mssql_server" "sonarqube_mssql" {
-#   resource_group_name = var.create_rg ? tostring(azurerm_resource_group.sonarqube_rg[0].name) : tostring(data.azurerm_resource_group.sonarqube_rg[0].name)
-#   location            = var.create_rg ? tostring(azurerm_resource_group.sonarqube_rg[0].location) : tostring(data.azurerm_resource_group.sonarqube_rg[0].location)
-#   #values from variable mssql_config object
-#   name                         = lower(var.mssql_config.name)
-#   version                      = var.mssql_config.version
-#   administrator_login          = azurerm_key_vault_secret.username_secret.value
-#   administrator_login_password = azurerm_key_vault_secret.password_secret.value
-#   tags                         = var.tags
-# }
-# #Set firewall to allow AzureIPs (Container instances)
-# resource "azurerm_mssql_firewall_rule" "sonarqube_mssql_fw_rules" {
-#   count            = length(var.mssql_fw_rules)
-#   server_id        = azurerm_mssql_server.sonarqube_mssql.id
-#   name             = var.mssql_fw_rules[count.index][0]
-#   start_ip_address = var.mssql_fw_rules[count.index][1]
-#   end_ip_address   = var.mssql_fw_rules[count.index][2]
-# }
+### Azure SQL Server ###
+#Random Password
+resource "random_password" "sql_admin_password" {
+  length           = var.pass_length
+  special          = true
+  override_special = "/@\" "
+}
+
+#Add SQL admin Password and Username to Keyvault
+resource "azurerm_key_vault_secret" "password_secret" {
+  name         = "sonarq-mssql-sa-password"
+  value        = random_password.sql_admin_password.result
+  key_vault_id = azurerm_key_vault.sonarqube_kv.id
+  depends_on = [azurerm_role_assignment.kv_role_assigment]
+}
+
+resource "azurerm_key_vault_secret" "username_secret" {
+  name         = "sonarq-mssql-sa-username"
+  value        = var.sql_admin_username
+  key_vault_id = azurerm_key_vault.sonarqube_kv.id
+  depends_on = [azurerm_role_assignment.kv_role_assigment]
+}
+
+#Create MSSQL server instance
+resource "azurerm_mssql_server" "sonarqube_mssql" {
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  #values from variable mssql_config object
+  name                         = lower(var.mssql_config.name)
+  version                      = var.mssql_config.version
+  administrator_login          = azurerm_key_vault_secret.username_secret.value
+  administrator_login_password = azurerm_key_vault_secret.password_secret.value
+  tags                         = var.tags
+}
+
+#Private Endpoint for mssql server
+module "private_endpoint_mssql" {
+  source                          = "./private_endpoint"
+  location                        = azurerm_mssql_server.sonarqube_mssql.location
+  resource_group_name             = azurerm_mssql_server.sonarqube_mssql.resource_group_name
+  subnet_id                       = data.azurerm_subnet.resource_subnet.id
+  private_endpoint_name           = "${azurerm_mssql_server.sonarqube_mssql.name}-pe"
+  private_service_connection_name = "${azurerm_mssql_server.sonarqube_mssql.name}-pe-sc"
+  private_connection_resource_id  = azurerm_mssql_server.sonarqube_mssql.id
+  private_dns_zone_group          = local.loc_private_dns_zone_group_mssql
+  is_manual_connection            = false
+  subresource_names               = ["sqlServer"]
+  tags                            = var.tags
+}
+
+#Set firewall to allow AzureIPs (Container instances)
+resource "azurerm_mssql_firewall_rule" "sonarqube_mssql_fw_rules" {
+  count            = length(var.mssql_fw_rules)
+  server_id        = azurerm_mssql_server.sonarqube_mssql.id
+  name             = var.mssql_fw_rules[count.index][0]
+  start_ip_address = var.mssql_fw_rules[count.index][1]
+  end_ip_address   = var.mssql_fw_rules[count.index][2]
+}
+
+#Enable sevice endpoint for mssql server
+resource "azurerm_mssql_virtual_network_rule" "mssql_vnet_rule" {
+  name      = "sql-vnet-rule"
+  server_id = azurerm_mssql_server.sonarqube_mssql.id
+  subnet_id = data.azurerm_subnet.resource_subnet.id
+}
 
 # ###MSSQL Database###
 # resource "azurerm_mssql_database" "sonarqube_mssql_db" {
