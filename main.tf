@@ -11,6 +11,15 @@ resource "azurerm_key_vault" "sonarqube_kv" {
   name      = lower(var.kv_config.name)
   sku_name  = var.kv_config.sku
   tenant_id = data.azurerm_client_config.current.tenant_id
+  dynamic "network_acls" {
+    for_each = local.kv_net_rules
+    content {
+      default_action             = network_acls.value.default_action
+      bypass                     = network_acls.value.bypass
+      ip_rules                   = network_acls.value.ip_rules
+      virtual_network_subnet_ids = network_acls.value.virtual_network_subnet_ids
+    }
+  }
   tags      = var.tags
 }
 
@@ -18,7 +27,7 @@ resource "azurerm_key_vault" "sonarqube_kv" {
 module "private_endpoint_kv" {
   source                          = "./private_endpoint"
   location                        = azurerm_key_vault.sonarqube_kv.location
-  resource_group_name             = azurerm_key_vault.sonarqube_kv.name
+  resource_group_name             = azurerm_key_vault.sonarqube_kv.resource_group_name
   subnet_id                       = data.azurerm_subnet.resource_subnet.id
   private_endpoint_name           = "${azurerm_key_vault.sonarqube_kv.name}-pe"
   private_service_connection_name = "${azurerm_key_vault.sonarqube_kv.name}-pe-sc"
@@ -50,8 +59,18 @@ resource "azurerm_storage_account" "sonarqube_sa" {
   enable_https_traffic_only = var.sa_config.enable_https_traffic_only
   min_tls_version           = var.sa_config.min_tls_version
   is_hns_enabled            = var.sa_config.is_hns_enabled
-  tags                      = var.tags
+  dynamic "network_rules" {
+    for_each = local.sa_net_rules
+    content {
+      default_action             = network_rules.value.default_action
+      bypass                     = network_rules.value.bypass
+      ip_rules                   = network_rules.value.ip_rules
+      virtual_network_subnet_ids = network_rules.value.virtual_network_subnet_ids
+    }
+  }
+  tags = var.tags
 }
+
 #Sonarqube shares
 resource "azurerm_storage_share" "sonarqube" {
   for_each             = { for each in var.shares_config : each.share_name => each }
@@ -70,7 +89,7 @@ resource "azurerm_storage_share_file" "sonar_properties" {
 module "private_endpoint_sa" {
   source                          = "./private_endpoint"
   location                        = azurerm_storage_account.sonarqube_sa.location
-  resource_group_name             = azurerm_storage_account.sonarqube_sa.name
+  resource_group_name             = azurerm_storage_account.sonarqube_sa.resource_group_name
   subnet_id                       = data.azurerm_subnet.resource_subnet.id
   private_endpoint_name           = "${azurerm_storage_account.sonarqube_sa.name}-pe"
   private_service_connection_name = "${azurerm_storage_account.sonarqube_sa.name}-pe-sc"

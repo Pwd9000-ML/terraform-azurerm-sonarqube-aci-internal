@@ -20,9 +20,11 @@ data "azurerm_subnet" "delegated_subnet_aci" {
 data "azurerm_private_dns_zone" "keyvault" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = var.network_resource_group_name
+  depends_on          = [azurerm_key_vault.sonarqube_kv]
 }
 
 data "azurerm_private_dns_zone" "storage" {
   name                = "privatelink.file.core.windows.net"
   resource_group_name = var.network_resource_group_name
+  depends_on          = [azurerm_storage_account.sonarqube_sa]
 }
