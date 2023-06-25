@@ -1,6 +1,33 @@
 ##################################################
-# RESOURCES                                      #
+# CREATE NETWORK RESOURCE PREREQUISITES.         #
 ##################################################
+# IMPORTANT: If existing network resources exist #
+# set 'var.create_networking_prereqs' = false    #
+##################################################
+
+module "private_endpoint_kv" {
+  source                          = "./modules/network_prereqs"
+  # Only deploy networking prereqs if 'var.create_networking_prereqs' is true
+  count                           = var.create_networking_prereqs == true ? 1 : 0
+  location                        = azurerm_key_vault.sonarqube_kv.location
+  resource_group_name             = azurerm_key_vault.sonarqube_kv.resource_group_name
+  subnet_id                       = data.azurerm_subnet.resource_subnet.id
+  private_endpoint_name           = "${azurerm_key_vault.sonarqube_kv.name}-pe"
+  private_service_connection_name = "${azurerm_key_vault.sonarqube_kv.name}-pe-sc"
+  private_connection_resource_id  = azurerm_key_vault.sonarqube_kv.id
+  private_dns_zone_group          = local.loc_private_dns_zone_group_kv
+  is_manual_connection            = false
+  subresource_names               = ["Vault"]
+  tags                            = var.tags
+}
+
+###############################################################
+# DEPLOY VNET INTEGRATED SONARQUBE ACI + SUPPORTING RESOURCES #
+###############################################################
+# IMPORTANT: If existing network resources exist only supply  #
+# the relevant variables to the module below.(See ./examples) #
+###############################################################
+### MAIN MODULE START - DEPLOY VNET INTEGRATED SONARQUBE ACI INSTANCE - ENSURE NETWORKING PREREQS EXIST OR CREATE NEW FROM MODULE './modules/network_prereqs' ###
 ###Key Vault###
 #Create Key Vault with RBAC model (To save SQL admin Password and Username)
 resource "azurerm_key_vault" "sonarqube_kv" {

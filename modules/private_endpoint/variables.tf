@@ -1,12 +1,12 @@
+variable "resource_group_name" {
+  type        = string
+  description = "The name of the Resource Group where the resources will be created."
+}
+
 variable "location" {
   type        = string
   default     = "uksouth"
   description = "The location/region where the resources will be created. The full list of Azure regions can be found at https://azure.microsoft.com/regions"
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "The name of the Resource Group where the resources will be created."
 }
 
 variable "subnet_id" {
@@ -52,5 +52,11 @@ variable "subresource_names" {
 
 variable "tags" {
   type        = map(any)
+    default = {
+    Terraform   = "True"
+    Description = "Sonarqube Private Endpoint Resource."
+    Author      = "Marcel Lupo"
+    GitHub      = "https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal"
+  }
   description = "A Map of tags to be applied to the resources."
 }

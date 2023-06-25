@@ -59,6 +59,9 @@ variable "delegated_subnet_name" {
   description = "The name for the aci delegated subnet, used in data source to get subnet ID."
 }
 
+##################################################
+# MAIN MODULE START                              #
+##################################################
 ###Key Vault###
 variable "kv_config" {
   type = object({
@@ -223,13 +226,6 @@ variable "mssql_db_config" {
   }
   description = "MSSQL database configuration object to create persistent azure SQL db for sonarqube aci."
 }
-
-###Container Group - ACIs###
-#variable "aci_dns_label" {
-#  type        = string
-#  description = "DNS label to assign onto the Azure Container Group."
-#  nullable    = false
-#}
 
 variable "aci_group_config" {
   type = object({
