@@ -25,7 +25,7 @@ resource "azurerm_key_vault" "sonarqube_kv" {
 
 #Private Endpoint for keyvault
 module "private_endpoint_kv" {
-  source                          = "./private_endpoint"
+  source                          = "./modules/private_endpoint"
   location                        = azurerm_key_vault.sonarqube_kv.location
   resource_group_name             = azurerm_key_vault.sonarqube_kv.resource_group_name
   subnet_id                       = data.azurerm_subnet.resource_subnet.id
@@ -87,7 +87,7 @@ resource "azurerm_storage_share_file" "sonar_properties" {
 
 #Private Endpoint for aci storage account
 module "private_endpoint_sa" {
-  source                          = "./private_endpoint"
+  source                          = "./modules/private_endpoint"
   location                        = azurerm_storage_account.sonarqube_sa.location
   resource_group_name             = azurerm_storage_account.sonarqube_sa.resource_group_name
   subnet_id                       = data.azurerm_subnet.resource_subnet.id
@@ -137,7 +137,7 @@ resource "azurerm_mssql_server" "sonarqube_mssql" {
 
 #Private Endpoint for mssql server
 module "private_endpoint_mssql" {
-  source                          = "./private_endpoint"
+  source                          = "./modules/private_endpoint"
   location                        = azurerm_mssql_server.sonarqube_mssql.location
   resource_group_name             = azurerm_mssql_server.sonarqube_mssql.resource_group_name
   subnet_id                       = data.azurerm_subnet.resource_subnet.id
