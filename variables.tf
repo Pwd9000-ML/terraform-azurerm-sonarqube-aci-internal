@@ -283,17 +283,17 @@ variable "caddy_config" {
 variable "aci_private_dns_record" {
   type        = bool
   default     = false
-  description = "Create private dns record for aci in '.local' Azure private DNS zone. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) If false, add private IP to hosts file to resolve aci private dns record: 'custom.domain.local'."
+  description = "Create private dns record for internal sonarqube instance in '.local'(internal) Azure private DNS zone. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) If false, add private IP to hosts file to resolve the dns record for internal sonarqube instance: 'custom.domain.local'."
 }
 
 variable "local_dns_zone_name" {
   type        = string
   default     = "pwd9000.local"
-  description = "Private Azure dns zone for '.local' to add aci private dns record. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) Otherwise use hosts file to resolve aci private dns record: 'custom.domain.local'."
+  description = "Private Azure dns zone name for the '.local'(internal) DNS zone to add dns record for internal sonarqube instance. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) Otherwise use hosts file to resolve the dns record for internal sonarqube instance: 'custom.domain.local'."
 }
 
 variable "sonarqube_private_dns_record" {
   type        = string
   default     = "sonar"
-  description = "Private dns record for sonarqube aci. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) Otherwise use hosts file to resolve aci private dns record: 'custom.domain.local'."
+  description = "Private dns A record for sonarqube instance. (Remember to add dns zone link to other peered vnets to resolve aci dns record.) Otherwise use hosts file to resolve the dns record for internal sonarqube instance: 'custom.domain.local'."
 }
