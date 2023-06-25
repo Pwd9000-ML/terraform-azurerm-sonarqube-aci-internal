@@ -26,11 +26,19 @@ variable "resource_group_name" {
   description = "Name of the resource group where resources will be hosted."
 }
 
-###Networking###
+##################################################
+# Networking Prereqs                             #
+##################################################
+variable "create_networking_prereqs" {
+  type        = bool
+  default     = false
+  description = "Create networking resources required for ACI to be deployed."
+}
+
 variable "network_resource_group_name" {
   type        = string
   default     = "Terraform-Sonarqube-aci-interal"
-  description = "Name of the resource group where networking resources are hosted (if different from resource group hoting ACI)."
+  description = "Name of the resource group where networking resources are hosted (if different from resource group hosting ACI resources)."
 }
 
 variable "virtual_network_name" {
