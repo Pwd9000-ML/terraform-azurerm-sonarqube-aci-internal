@@ -32,7 +32,7 @@ No modules.
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the Resource Group where the resources will be created. | `string` | n/a | yes |
 | <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | The ID of the Subnet to attach the privaye endpoint to. | `string` | n/a | yes |
 | <a name="input_subresource_names"></a> [subresource\_names](#input\_subresource\_names) | A list of subresource names which the Private Endpoint is able to connect to. subresource\_names corresponds to group\_id. Changing this forces a new resource to be created. | `list(string)` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | A Map of tags to be applied to the resources. | `map(any)` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A Map of tags to be applied to the resources. | `map(any)` | <pre>{<br>  "Author": "Marcel Lupo",<br>  "Description": "Sonarqube Private Endpoint Resource.",<br>  "GitHub": "https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal",<br>  "Terraform": "True"<br>}</pre> | no |
 
 ## Outputs
 

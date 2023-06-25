@@ -1,6 +1,7 @@
 variable "network_resource_group_name" {
   type        = string
   description = "Name of the resource group to where networking resources will be hosted."
+  nullable    = false
 }
 
 variable "location" {

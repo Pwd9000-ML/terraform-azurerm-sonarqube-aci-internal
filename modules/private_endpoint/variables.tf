@@ -51,8 +51,8 @@ variable "subresource_names" {
 }
 
 variable "tags" {
-  type        = map(any)
-    default = {
+  type = map(any)
+  default = {
     Terraform   = "True"
     Description = "Sonarqube Private Endpoint Resource."
     Author      = "Marcel Lupo"

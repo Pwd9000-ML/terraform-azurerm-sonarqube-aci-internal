@@ -40,12 +40,10 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_delegated_subnet_address_prefix"></a> [delegated\_subnet\_address\_prefix](#output\_delegated\_subnet\_address\_prefix) | The address prefix of the sonarqube delegated subnet. |
-| <a name="output_delegated_subnet_id"></a> [delegated\_subnet\_id](#output\_delegated\_subnet\_id) | The resource ID for the sonarqube delegated subnet. |
-| <a name="output_private_dns_zone_ids"></a> [private\_dns\_zone\_ids](#output\_private\_dns\_zone\_ids) | The ids of the sonarqube private dns zones. |
-| <a name="output_private_dns_zone_vnet_link_ids"></a> [private\_dns\_zone\_vnet\_link\_ids](#output\_private\_dns\_zone\_vnet\_link\_ids) | The ids of the sonarqube private dns zone vnet links. |
-| <a name="output_resource_subnet_address_prefix"></a> [resource\_subnet\_address\_prefix](#output\_resource\_subnet\_address\_prefix) | The address prefix of the sonarqube resource subnet. |
-| <a name="output_resource_subnet_id"></a> [resource\_subnet\_id](#output\_resource\_subnet\_id) | The resource ID for the sonarqube resource subnet. |
+| <a name="output_delegated_subnets"></a> [delegated\_subnets](#output\_delegated\_subnets) | output the delegated subnet objects. |
+| <a name="output_private_dns_zone_vnet_links"></a> [private\_dns\_zone\_vnet\_links](#output\_private\_dns\_zone\_vnet\_links) | output the private dns zone vnet link objects. |
+| <a name="output_private_dns_zones"></a> [private\_dns\_zones](#output\_private\_dns\_zones) | output the private dns zone objects. |
+| <a name="output_resource_subnets"></a> [resource\_subnets](#output\_resource\_subnets) | output the resource subnet objects. |
 | <a name="output_vnet_address_space"></a> [vnet\_address\_space](#output\_vnet\_address\_space) | The address space of the sonarqube virtual network. |
 | <a name="output_vnet_id"></a> [vnet\_id](#output\_vnet\_id) | The resource ID for the sonarqube virtual network. |
 <!-- END_TF_DOCS -->

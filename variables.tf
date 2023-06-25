@@ -22,15 +22,15 @@ variable "location" {
 ###Resource Group###
 variable "resource_group_name" {
   type        = string
-  default     = "Terraform-Sonarqube-aci-interal"
   description = "Name of the resource group where resources will be hosted."
+  nullable    = false
 }
 
 
 variable "network_resource_group_name" {
   type        = string
-  default = "Terraform-Sonarqube-aci-interal-network"
   description = "Name of the resource group where networking resources are hosted (if different from resource group hosting ACI resources)."
+  nullable    = false
 }
 
 ##########################################
@@ -62,7 +62,7 @@ variable "subnet_config" {
     private_endpoint_network_policies_enabled     = bool
     private_link_service_network_policies_enabled = bool
   }))
-  default = null
+  default     = null
   description = "A list of subnet configuration objects to create subnets in the virtual network."
 }
 
@@ -77,7 +77,7 @@ variable "subnet_config_delegated_aci" {
     delegation_service                            = string
     delegation_ations                             = list(string)
   }))
-  default = null
+  default     = null
   description = "A list of subnet configuration objects to create subnets in the virtual network. - delegated to ACI"
 }
 
@@ -93,14 +93,14 @@ variable "private_dns_zones" {
 ### Supply subnet names to retrieve subnet IDs ###
 variable "resource_subnet_name" {
   type        = string
-  default     = "sonarqube-resource-sub"
   description = "The name for the resource subnet, used in data source to get subnet ID."
+  nullable    = false
 }
 
 variable "delegated_subnet_name" {
   type        = string
-  default     = "sonarqube-delegated-sub"
   description = "The name for the aci delegated subnet, used in data source to get subnet ID."
+  nullable    = false
 }
 
 ###Key Vault###

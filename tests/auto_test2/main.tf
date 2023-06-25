@@ -49,9 +49,9 @@ module "sonarcube-aci-internal" {
   tags                        = var.tags
 
   #Create networking prerequisites
-  create_networking_resources = true
-  virtual_network_name        = "sonarqube-int-vnet-${random_integer.number.result}"
-  vnet_address_space          = ["10.3.0.0/16"]
+  create_networking_prereqs = true
+  virtual_network_name      = "sonarqube-vnet-${random_integer.number.result}"
+  vnet_address_space        = ["10.3.0.0/16"]
   subnet_config = [
     {
       subnet_name                                   = "sonarqube-resource-sub-${random_integer.number.result}"
@@ -134,6 +134,6 @@ module "sonarcube-aci-internal" {
   }
 
   aci_private_dns_record       = true
-  local_dns_zone_name          = "pwd9000.local" #Add aditional DNS zones kinks manually to peered VNETs
+  local_dns_zone_name          = "pwd9000.local" # (TIP: Add aditional DNS zone links manually to this zone to any peered VNETs for resolution)
   sonarqube_private_dns_record = "sonar"
 }

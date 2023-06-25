@@ -1,19 +1,6 @@
 #####################################################
 # PRE-REQS (VNET, Subs, Delegated Subs, DNS, LINKS) #
 #####################################################
-### Random integer to generate unique names
-#resource "random_integer" "number" {
-#  min = 0001
-#  max = 9999
-#}
-
-### Resource group to deploy the module prerequisite resources into
-#resource "azurerm_resource_group" "sonarqube_rg" {
-#  name     = var.resource_group_name
-#  location = var.location
-#  tags     = var.tags
-#}
-
 ### Virtual network to deploy the container group and prerequisite resources into
 resource "azurerm_virtual_network" "sonarqube_vnet" {
   name                = var.virtual_network_name
@@ -25,34 +12,36 @@ resource "azurerm_virtual_network" "sonarqube_vnet" {
 
 # Subnets required for resources to be deployed + Service Endpoints (Storage, SQL, KeyVault)
 resource "azurerm_subnet" "resource_subnets" {
-  for_each                                      = { for each in var.subnet_config : each.subnet_name => each }
+  count                                         = length(var.subnet_config)
   resource_group_name                           = var.network_resource_group_name
-  name                                          = each.value.subnet_name
+  name                                          = var.subnet_config[count.index].subnet_name
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
-  address_prefixes                              = each.value.subnet_address_space
-  service_endpoints                             = each.value.service_endpoints
-  private_endpoint_network_policies_enabled     = each.value.private_endpoint_network_policies_enabled
-  private_link_service_network_policies_enabled = each.value.private_link_service_network_policies_enabled
+  address_prefixes                              = var.subnet_config[count.index].subnet_address_space
+  service_endpoints                             = var.subnet_config[count.index].service_endpoints
+  private_endpoint_network_policies_enabled     = var.subnet_config[count.index].private_endpoint_network_policies_enabled
+  private_link_service_network_policies_enabled = var.subnet_config[count.index].private_link_service_network_policies_enabled
+  depends_on                                    = [azurerm_virtual_network.sonarqube_vnet]
 }
 
 ### Subnet to deploy the container group into - Delegated to ACI
 resource "azurerm_subnet" "sonarqube_sub_del" {
-  for_each                                      = { for each in var.subnet_config_delegated_aci : each.subnet_name => each }
-  name                                          = each.value.subnet_name
+  count                                         = length(var.subnet_config_delegated_aci)
+  name                                          = var.subnet_config_delegated_aci[count.index].subnet_name
   resource_group_name                           = var.network_resource_group_name
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
-  address_prefixes                              = each.value.subnet_address_space
-  service_endpoints                             = each.value.service_endpoints
-  private_endpoint_network_policies_enabled     = each.value.private_endpoint_network_policies_enabled
-  private_link_service_network_policies_enabled = each.value.private_link_service_network_policies_enabled
+  address_prefixes                              = var.subnet_config_delegated_aci[count.index].subnet_address_space
+  service_endpoints                             = var.subnet_config_delegated_aci[count.index].service_endpoints
+  private_endpoint_network_policies_enabled     = var.subnet_config_delegated_aci[count.index].private_endpoint_network_policies_enabled
+  private_link_service_network_policies_enabled = var.subnet_config_delegated_aci[count.index].private_link_service_network_policies_enabled
   delegation {
-    name = each.value.delegation_name
+    name = var.subnet_config_delegated_aci[count.index].delegation_name
 
     service_delegation {
-      name    = each.value.delegation_service
-      actions = each.value.delegation_ations
+      name    = var.subnet_config_delegated_aci[count.index].delegation_service
+      actions = var.subnet_config_delegated_aci[count.index].delegation_ations
     }
   }
+  depends_on = [azurerm_virtual_network.sonarqube_vnet]
 }
 
 ## Private DNS Zones for resources deployed into the VNET (Storage, SQL, KeyVault and 'l'ocal' private DNS zone for SonarQube instance)

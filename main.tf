@@ -5,8 +5,8 @@
 # set 'var.create_networking_prereqs' = false    #
 ##################################################
 
-module "private_endpoint_kv" {
-  source                          = "./modules/network_prereqs"
+module "create_networking_prereqs" {
+  source = "./modules/network_prereqs"
   # Only deploy networking prereqs if 'var.create_networking_prereqs' is true
   count                       = var.create_networking_prereqs == true ? 1 : 0
   network_resource_group_name = var.network_resource_group_name
