@@ -8,17 +8,15 @@
 module "private_endpoint_kv" {
   source                          = "./modules/network_prereqs"
   # Only deploy networking prereqs if 'var.create_networking_prereqs' is true
-  count                           = var.create_networking_prereqs == true ? 1 : 0
-  location                        = azurerm_key_vault.sonarqube_kv.location
-  resource_group_name             = azurerm_key_vault.sonarqube_kv.resource_group_name
-  subnet_id                       = data.azurerm_subnet.resource_subnet.id
-  private_endpoint_name           = "${azurerm_key_vault.sonarqube_kv.name}-pe"
-  private_service_connection_name = "${azurerm_key_vault.sonarqube_kv.name}-pe-sc"
-  private_connection_resource_id  = azurerm_key_vault.sonarqube_kv.id
-  private_dns_zone_group          = local.loc_private_dns_zone_group_kv
-  is_manual_connection            = false
-  subresource_names               = ["Vault"]
-  tags                            = var.tags
+  count                       = var.create_networking_prereqs == true ? 1 : 0
+  network_resource_group_name = var.network_resource_group_name
+  location                    = var.location
+  virtual_network_name        = var.virtual_network_name
+  vnet_address_space          = var.vnet_address_space
+  subnet_config               = var.subnet_config
+  subnet_config_delegated_aci = var.subnet_config_delegated_aci
+  private_dns_zones           = var.private_dns_zones
+  tags                        = var.tags
 }
 
 ###############################################################

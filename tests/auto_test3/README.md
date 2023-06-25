@@ -1,0 +1,1 @@
+# Test with existing VNET and RG

@@ -1,1 +1,1 @@
-# Test with new RG and VNET
+# Test with new RG and VNET (Seperate resources)

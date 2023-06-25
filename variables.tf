@@ -26,27 +26,71 @@ variable "resource_group_name" {
   description = "Name of the resource group where resources will be hosted."
 }
 
-##################################################
-# Networking Prereqs                             #
-##################################################
+
+variable "network_resource_group_name" {
+  type        = string
+  default = "Terraform-Sonarqube-aci-interal-network"
+  description = "Name of the resource group where networking resources are hosted (if different from resource group hosting ACI resources)."
+}
+
+##########################################
+# Networking                             #
+##########################################
 variable "create_networking_prereqs" {
   type        = bool
   default     = false
   description = "Create networking resources required for ACI to be deployed."
 }
 
-variable "network_resource_group_name" {
-  type        = string
-  default     = "Terraform-Sonarqube-aci-interal"
-  description = "Name of the resource group where networking resources are hosted (if different from resource group hosting ACI resources)."
-}
-
 variable "virtual_network_name" {
   type        = string
-  default     = "sonarqube-int-vnet"
+  default     = null
   description = "Name of the virtual network where resources are attached."
 }
 
+variable "vnet_address_space" {
+  type        = list(string)
+  default     = null
+  description = "value of the address space for the virtual network."
+}
+
+variable "subnet_config" {
+  type = list(object({
+    subnet_name                                   = string
+    subnet_address_space                          = list(string)
+    service_endpoints                             = list(string)
+    private_endpoint_network_policies_enabled     = bool
+    private_link_service_network_policies_enabled = bool
+  }))
+  default = null
+  description = "A list of subnet configuration objects to create subnets in the virtual network."
+}
+
+variable "subnet_config_delegated_aci" {
+  type = list(object({
+    subnet_name                                   = string
+    subnet_address_space                          = list(string)
+    service_endpoints                             = list(string)
+    private_endpoint_network_policies_enabled     = bool
+    private_link_service_network_policies_enabled = bool
+    delegation_name                               = string
+    delegation_service                            = string
+    delegation_ations                             = list(string)
+  }))
+  default = null
+  description = "A list of subnet configuration objects to create subnets in the virtual network. - delegated to ACI"
+}
+
+variable "private_dns_zones" {
+  type        = list(string)
+  default     = null
+  description = "Private DNS zones to create and link to VNET."
+}
+
+##################################################
+# MAIN MODULE START                              #
+##################################################
+### Supply subnet names to retrieve subnet IDs ###
 variable "resource_subnet_name" {
   type        = string
   default     = "sonarqube-resource-sub"
@@ -59,9 +103,6 @@ variable "delegated_subnet_name" {
   description = "The name for the aci delegated subnet, used in data source to get subnet ID."
 }
 
-##################################################
-# MAIN MODULE START                              #
-##################################################
 ###Key Vault###
 variable "kv_config" {
   type = object({

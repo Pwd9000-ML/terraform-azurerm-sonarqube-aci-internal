@@ -1,1 +1,1 @@
-# Test with existing VNET and RG
+# Test with VNET prereqs = true
