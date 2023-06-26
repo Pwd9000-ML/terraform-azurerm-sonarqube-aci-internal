@@ -22,9 +22,16 @@ resource "random_integer" "number" {
   max = 9999
 }
 
-### Resource group to deploy the module prerequisite resources into
+### Resource group to deploy the sonarqube instance and supporting resources into
 resource "azurerm_resource_group" "sonarqube_rg" {
-  name     = var.resource_group_name
+  name     = var.sonarqube_resource_group_name
+  location = var.location
+  tags     = var.tags
+}
+
+### Resource group to deploy networking resources for VNET integration of the sonarqube instance and supporting resources
+resource "azurerm_resource_group" "sonarqube_vnet_rg" {
+  name     = var.network_resource_group_name
   location = var.location
   tags     = var.tags
 }
@@ -32,8 +39,8 @@ resource "azurerm_resource_group" "sonarqube_rg" {
 ### Virtual network to deploy the container group and prerequisite resources into
 resource "azurerm_virtual_network" "sonarqube_vnet" {
   name                = "${var.virtual_network_name}-${random_integer.number.result}"
-  location            = azurerm_resource_group.sonarqube_rg.location
-  resource_group_name = azurerm_resource_group.sonarqube_rg.name
+  location            = azurerm_resource_group.sonarqube_vnet_rg.location
+  resource_group_name = azurerm_resource_group.sonarqube_vnet_rg.name
   address_space       = var.vnet_address_space
   tags                = var.tags
 }
@@ -41,7 +48,7 @@ resource "azurerm_virtual_network" "sonarqube_vnet" {
 # Subnets required for resources to be deployed + Service Endpoints (Storage, SQL, KeyVault)
 resource "azurerm_subnet" "resource_subnets" {
   for_each                                      = { for each in var.subnet_config : each.subnet_name => each }
-  resource_group_name                           = azurerm_resource_group.sonarqube_rg.name
+  resource_group_name                           = azurerm_resource_group.sonarqube_vnet_rg.name
   name                                          = "${each.value.subnet_name}-${random_integer.number.result}"
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
   address_prefixes                              = each.value.subnet_address_space
@@ -54,7 +61,7 @@ resource "azurerm_subnet" "resource_subnets" {
 resource "azurerm_subnet" "sonarqube_sub_del" {
   for_each                                      = { for each in var.subnet_config_delegated_aci : each.subnet_name => each }
   name                                          = "${each.value.subnet_name}-${random_integer.number.result}"
-  resource_group_name                           = azurerm_resource_group.sonarqube_rg.name
+  resource_group_name                           = azurerm_resource_group.sonarqube_vnet_rg.name
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
   address_prefixes                              = each.value.subnet_address_space
   service_endpoints                             = each.value.service_endpoints
@@ -74,14 +81,14 @@ resource "azurerm_subnet" "sonarqube_sub_del" {
 resource "azurerm_private_dns_zone" "private_dns_zones" {
   for_each            = toset(var.private_dns_zones)
   name                = each.key
-  resource_group_name = azurerm_resource_group.sonarqube_rg.name
+  resource_group_name = azurerm_resource_group.sonarqube_vnet_rg.name
   tags                = var.tags
 }
 ## Link Private DNS Zones to VNET
 resource "azurerm_private_dns_zone_virtual_network_link" "vnet-link" {
   for_each              = toset(var.private_dns_zones)
   name                  = "${each.key}-net-link"
-  resource_group_name   = azurerm_resource_group.sonarqube_rg.name
+  resource_group_name   = azurerm_resource_group.sonarqube_vnet_rg.name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zones[each.key].name
   virtual_network_id    = azurerm_virtual_network.sonarqube_vnet.id
   tags                  = var.tags
@@ -93,12 +100,16 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnet-link" {
 module "sonarcube-aci-internal" {
   source = "../.."
 
-  #Resource Group hosting aci resources
-  resource_group_name = azurerm_resource_group.sonarqube_rg.name
-  location            = azurerm_resource_group.sonarqube_rg.location
+  #Required
+  resource_group_name         = azurerm_resource_group.sonarqube_rg.name #Used to deploy resources into for the sonarqube instance and supporting resources
+  network_resource_group_name = azurerm_resource_group.sonarqube_vnet_rg.name #Used to get subnet IDs where VNET is hosted for resources private endpoints
+  location                    = var.location
+  tags                        = var.tags
 
-  #Resource Group hosting networking resources
-  network_resource_group_name = azurerm_resource_group.sonarqube_rg.name                         #Used to get subnet IDs where VNET is hosted for resources private endpoints
+  #Create networking prerequisites
+  create_networking_prereqs = false
+
+  #Resource Group hosting networking resources                     
   virtual_network_name        = azurerm_virtual_network.sonarqube_vnet.name                      #Used to get subnet IDs from VNET for resources private endpoints
   resource_subnet_name        = azurerm_subnet.resource_subnets["sonarqube-resource-sub"].name   #Used to get subnet ID for resources private endpoints
   delegated_subnet_name       = azurerm_subnet.sonarqube_sub_del["sonarqube-delegated-sub"].name #Used to get subnet ID for ACI private endpoint
@@ -149,7 +160,6 @@ module "sonarcube-aci-internal" {
     container_environment_variables = null
     container_commands              = ["caddy", "reverse-proxy", "--from", "sonar.pwd9000.local", "--to", "localhost:9000", "--internal-certs"]
   }
-  tags                         = var.tags
   aci_private_dns_record       = true
   local_dns_zone_name          = "pwd9000.local"
   sonarqube_private_dns_record = "sonar"
