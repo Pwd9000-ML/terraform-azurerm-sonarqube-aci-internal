@@ -1,6 +1,6 @@
 terraform {
   #backend "azurerm" {}
-  backend "local" {path = "terraform-test3.tfstate"}
+  backend "local" { path = "terraform-test3.tfstate" }
 }
 
 provider "azurerm" {
@@ -47,33 +47,14 @@ module "sonarcube-aci-internal" {
   tags                        = var.tags
 
   #Create networking prerequisites
-  create_networking_prereqs = true
-  virtual_network_name      = "sonarqube-vnet-${random_integer.number.result}"
-  vnet_address_space        = ["10.3.0.0/16"]
-  subnet_config = [
-    {
-      subnet_name                                   = "sonarqube-resource-sub-${random_integer.number.result}"
-      subnet_address_space                          = ["10.3.0.0/24"]
-      service_endpoints                             = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.KeyVault"]
-      private_endpoint_network_policies_enabled     = false
-      private_link_service_network_policies_enabled = false
-    }
-  ]
-  subnet_config_delegated_aci = [
-    {
-      subnet_name                                   = "sonarqube-delegated-sub-${random_integer.number.result}"
-      subnet_address_space                          = ["10.3.1.0/24"]
-      service_endpoints                             = []
-      private_endpoint_network_policies_enabled     = false
-      private_link_service_network_policies_enabled = false
-      delegation_name                               = "aci-sub-delegation"
-      delegation_service                            = "Microsoft.ContainerInstance/containerGroups"
-      delegation_ations                             = ["Microsoft.Network/virtualNetworks/subnets/action"]
-    }
-  ]
-  private_dns_zones     = ["privatelink.vaultcore.azure.net", "privatelink.file.core.windows.net", "privatelink.database.windows.net", "pwd9000.local"]
-  resource_subnet_name  = "sonarqube-resource-sub-${random_integer.number.result}"
-  delegated_subnet_name = "sonarqube-delegated-sub-${random_integer.number.result}"
+  create_networking_prereqs   = false
+  virtual_network_name        = var.virtual_network_name
+  vnet_address_space          = []
+  subnet_config               = []
+  subnet_config_delegated_aci = []
+  private_dns_zones           = var.private_dns_zones
+  resource_subnet_name        = var.resource_subnet_name
+  delegated_subnet_name       = var.delegated_subnet_name
 
   #KeyVault
   kv_config = {
