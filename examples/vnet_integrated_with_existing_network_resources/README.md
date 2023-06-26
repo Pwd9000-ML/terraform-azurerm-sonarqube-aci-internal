@@ -43,7 +43,7 @@ No requirements.
 | <a name="input_resource_subnet_name"></a> [resource\_subnet\_name](#input\_resource\_subnet\_name) | The name for the resource subnet, used in data source to get subnet ID. | `string` | `null` | no |
 | <a name="input_sonarqube_resource_group_name"></a> [sonarqube\_resource\_group\_name](#input\_sonarqube\_resource\_group\_name) | Name of the resource group to create where sonarqube instance resources will be hosted. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of key value pairs that is used to tag resources created. | `map(string)` | `{}` | no |
-| <a name="input_virtual_network_name"></a> [virtual\_network\_name](#input\_virtual\_network\_name) | Name of the virtual network where resources will be attached. | `string` | `null` | no |
+| <a name="input_virtual_network_name"></a> [virtual\_network\_name](#input\_virtual\_network\_name) | Name of the virtual network where resourceswill be attached. | `string` | `null` | no |
 
 ## Outputs
 
