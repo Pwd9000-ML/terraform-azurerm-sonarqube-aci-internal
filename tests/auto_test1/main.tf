@@ -101,7 +101,7 @@ module "sonarcube-aci-internal" {
   source = "../.."
 
   #Required
-  resource_group_name         = azurerm_resource_group.sonarqube_rg.name #Used to deploy resources into for the sonarqube instance and supporting resources
+  resource_group_name         = azurerm_resource_group.sonarqube_rg.name      #Used to deploy resources into for the sonarqube instance and supporting resources
   network_resource_group_name = azurerm_resource_group.sonarqube_vnet_rg.name #Used to get subnet IDs where VNET is hosted for resources private endpoints
   location                    = var.location
   tags                        = var.tags
@@ -110,9 +110,9 @@ module "sonarcube-aci-internal" {
   create_networking_prereqs = false
 
   #Resource Group hosting networking resources                     
-  virtual_network_name        = azurerm_virtual_network.sonarqube_vnet.name                      #Used to get subnet IDs from VNET for resources private endpoints
-  resource_subnet_name        = azurerm_subnet.resource_subnets["sonarqube-resource-sub"].name   #Used to get subnet ID for resources private endpoints
-  delegated_subnet_name       = azurerm_subnet.sonarqube_sub_del["sonarqube-delegated-sub"].name #Used to get subnet ID for ACI private endpoint
+  virtual_network_name  = azurerm_virtual_network.sonarqube_vnet.name                      #Used to get subnet IDs from VNET for resources private endpoints
+  resource_subnet_name  = azurerm_subnet.resource_subnets["sonarqube-resource-sub"].name   #Used to get subnet ID for resources private endpoints
+  delegated_subnet_name = azurerm_subnet.sonarqube_sub_del["sonarqube-delegated-sub"].name #Used to get subnet ID for ACI private endpoint
 
   #KeyVault
   kv_config = {

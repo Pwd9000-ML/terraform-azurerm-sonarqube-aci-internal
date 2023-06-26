@@ -8,14 +8,14 @@ data "azurerm_subnet" "resource_subnet" {
   name                 = var.resource_subnet_name
   virtual_network_name = var.virtual_network_name
   resource_group_name  = var.network_resource_group_name
-  depends_on = [ module.create_networking_prereqs ]
+  depends_on           = [module.create_networking_prereqs]
 }
 
 data "azurerm_subnet" "delegated_subnet_aci" {
   name                 = var.delegated_subnet_name
   virtual_network_name = var.virtual_network_name
   resource_group_name  = var.network_resource_group_name
-  depends_on = [ module.create_networking_prereqs ]
+  depends_on           = [module.create_networking_prereqs]
 }
 
 #Data sources to get private dns zone Ids

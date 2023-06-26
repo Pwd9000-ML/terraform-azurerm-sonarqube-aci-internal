@@ -42,7 +42,7 @@ variable "subnet_config" {
     private_endpoint_network_policies_enabled     = bool
     private_link_service_network_policies_enabled = bool
   }))
-  default = []
+  default     = []
   description = "A list of subnet configuration objects to create subnets in the virtual network."
 }
 
@@ -57,7 +57,7 @@ variable "subnet_config_delegated_aci" {
     delegation_service                            = string
     delegation_ations                             = list(string)
   }))
-  default = []
+  default     = []
   description = "A list of subnet configuration objects to create subnets in the virtual network. - delegated to ACI"
 }
 
