@@ -1,5 +1,5 @@
-network_resource_group_name   = "Terraform-Sonarqube-internal-aci-network"
-sonarqube_resource_group_name = "Terraform-Sonarqube-internal-aci"
+network_resource_group_name   = "Terraform-Sonarqube-internal-aci-network-t1"
+sonarqube_resource_group_name = "Terraform-Sonarqube-internal-aci-t1"
 location                      = "uksouth"
 virtual_network_name          = "sonarqube-vnet"
 vnet_address_space            = ["10.1.0.0/16"]

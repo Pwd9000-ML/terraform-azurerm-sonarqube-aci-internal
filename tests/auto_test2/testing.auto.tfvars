@@ -1,5 +1,5 @@
-network_resource_group_name   = "Terraform-Sonarqube-internal-aci-network"
-sonarqube_resource_group_name = "Terraform-Sonarqube-internal-aci"
+network_resource_group_name   = "Terraform-Sonarqube-internal-aci-network-t2"
+sonarqube_resource_group_name = "Terraform-Sonarqube-internal-aci-t2"
 location                      = "uksouth"
 
 tags = {
