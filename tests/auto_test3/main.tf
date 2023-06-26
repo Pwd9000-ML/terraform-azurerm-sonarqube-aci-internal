@@ -1,8 +1,6 @@
 terraform {
   #backend "azurerm" {}
-  backend "local" {
-    path = "terraform.tfstate"
-  }
+  backend "local" {path = "terraform-test3.tfstate"}
 }
 
 provider "azurerm" {
