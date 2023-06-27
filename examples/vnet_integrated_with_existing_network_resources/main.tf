@@ -48,7 +48,7 @@ module "sonarcube-aci-internal" {
   resource_subnet_name        = var.resource_subnet_name
   delegated_subnet_name       = var.delegated_subnet_name
 
-    #KeyVault
+  #KeyVault
   kv_config                        = var.kv_config
   keyvault_firewall_default_action = var.keyvault_firewall_default_action
   keyvault_firewall_bypass         = var.keyvault_firewall_bypass

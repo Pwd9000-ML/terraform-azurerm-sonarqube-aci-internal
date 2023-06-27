@@ -53,7 +53,7 @@ variable "subnet_config" {
     private_endpoint_network_policies_enabled     = bool
     private_link_service_network_policies_enabled = bool
   }))
-  default = []
+  default     = []
   description = "A list of subnet configuration objects to create subnets in the virtual network. (Not required if existing network resources are used.)"
 }
 
@@ -68,13 +68,13 @@ variable "subnet_config_delegated_aci" {
     delegation_service                            = string
     delegation_ations                             = list(string)
   }))
-  default = []
+  default     = []
   description = "A list of subnet configuration objects to create subnets in the virtual network. - delegated to ACI. (Not required if existing network resources are used.)"
 }
 
 variable "private_dns_zones" {
-  type = list(string)
-  default = []
+  type        = list(string)
+  default     = []
   description = "Private DNS zones to create. (Not required if existing network resources are used.)"
 }
 
