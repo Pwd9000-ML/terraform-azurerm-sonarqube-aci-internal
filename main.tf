@@ -217,7 +217,6 @@ resource "azurerm_mssql_database" "sonarqube_mssql_db" {
 resource "azurerm_container_group" "sonarqube_aci_private" {
   resource_group_name = var.resource_group_name
   location            = var.location
-  #dns_name_label      = var.aci_dns_label
   #values from variable aci_group_config object
   name            = lower(var.aci_group_config.container_group_name)
   ip_address_type = var.aci_group_config.ip_address_type
@@ -272,7 +271,7 @@ resource "azurerm_container_group" "sonarqube_aci_private" {
 }
 
 # Add private IP of ACI to private DNS zone
-resource "azurerm_private_dns_a_record" "example" {
+resource "azurerm_private_dns_a_record" "aci_a_record" {
   count               = var.aci_private_dns_record ? 1 : 0
   name                = var.sonarqube_private_dns_record
   zone_name           = var.local_dns_zone_name

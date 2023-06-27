@@ -110,11 +110,29 @@ variable "kv_config" {
     sku  = string
   })
   default = {
-    name = "sonarqube-kv9000"
+    name = "sonarqubekv9000"
     sku  = "standard"
   }
   description = "Key Vault configuration object to create azure key vault to store sonarqube aci sql creds."
   nullable    = false
+}
+
+variable "keyvault_firewall_default_action" {
+  type        = string
+  default     = "Deny"
+  description = "Default action for keyvault firewall rules."
+}
+
+variable "keyvault_firewall_bypass" {
+  type        = string
+  default     = "AzureServices"
+  description = "List of keyvault firewall rules to bypass."
+}
+
+variable "keyvault_firewall_allowed_ips" {
+  type        = list(string)
+  default     = []
+  description = "value of keyvault firewall allowed ip rules."
 }
 
 ###Storage Account###
@@ -169,24 +187,6 @@ variable "shares_config" {
   description = "Sonarqube file shares."
 }
 
-variable "keyvault_firewall_default_action" {
-  type        = string
-  default     = "Deny"
-  description = "Default action for keyvault firewall rules."
-}
-
-variable "keyvault_firewall_bypass" {
-  type        = string
-  default     = "AzureServices"
-  description = "List of keyvault firewall rules to bypass."
-}
-
-variable "keyvault_firewall_allowed_ips" {
-  type        = list(string)
-  default     = []
-  description = "value of keyvault firewall allowed ip rules."
-}
-
 variable "storage_firewall_default_action" {
   type        = string
   default     = "Deny"
@@ -223,6 +223,10 @@ variable "mssql_config" {
     name    = string
     version = string
   })
+  default = {
+    name    = "sonarqubemssql9000"
+    version = "12.0"
+  }
   description = "MSSQL configuration object to create persistent SQL server instance for sonarqube aci."
   nullable    = false
 }
