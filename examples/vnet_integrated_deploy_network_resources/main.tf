@@ -93,7 +93,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnet-link" {
 }
 
 ##################################################
-# MODULE TO TEST                                 #
+# MODULE                                         #
 ##################################################
 module "sonarcube-aci-internal" {
   source = "../.."
@@ -126,6 +126,8 @@ module "sonarcube-aci-internal" {
   storage_firewall_allowed_ips    = var.storage_firewall_allowed_ips
 
   #msSql Server + Databases
+  pass_length = var.pass_length
+  sql_admin_username = var.sql_admin_username
   mssql_config    = var.mssql_config
   mssql_db_config = var.mssql_db_config
   mssql_fw_rules  = var.mssql_fw_rules
