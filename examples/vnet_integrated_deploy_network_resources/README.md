@@ -9,7 +9,7 @@ Networking prerequisites are created separately to allow for reuse of the networ
 See **[VNET integrated deployment - networking resources deployed (Built-in)](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_builtin_network_resources):**  
 For an example of how to create the required **networking prerequisites** and **SonarQube instance** in one module by setting the parameter: `"create_networking_prereqs = true"`.  
 
-See **[VNET integrated deployment - existing network resources)](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_existing_network_resources):**  
+See **[VNET integrated deployment - existing network resources](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_existing_network_resources):**  
 For an example on how to create and integrate the SonarQube instance on exisiting network resources by setting the parameter: `"create_networking_prereqs = false"`.  
 
 <!-- BEGIN_TF_DOCS -->
