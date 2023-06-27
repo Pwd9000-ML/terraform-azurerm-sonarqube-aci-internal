@@ -37,11 +37,11 @@ output "sonarqube_aci_container_group_ip_address" {
 }
 
 output "azurerm_container_group" {
-    value       = azurerm_container_group.sonarqube_aci_private
-    description = "The container group object."
+  value       = azurerm_container_group.sonarqube_aci_private
+  description = "The container group object."
 }
 
 output "azurerm_private_dns_fqdn" {
-    value       = var.aci_private_dns_record ? azurerm_private_dns_a_record.aci_a_record[0].fqdn : null 
-    description = "The private DNS FQDN of the sonarqube instance."
+  value       = var.aci_private_dns_record ? azurerm_private_dns_a_record.aci_a_record[0].fqdn : null
+  description = "The private DNS FQDN of the sonarqube instance."
 }

@@ -126,11 +126,11 @@ module "sonarcube-aci-internal" {
   storage_firewall_allowed_ips    = var.storage_firewall_allowed_ips
 
   #msSql Server + Databases
-  pass_length = var.pass_length
+  pass_length        = var.pass_length
   sql_admin_username = var.sql_admin_username
-  mssql_config    = var.mssql_config
-  mssql_db_config = var.mssql_db_config
-  mssql_fw_rules  = var.mssql_fw_rules
+  mssql_config       = var.mssql_config
+  mssql_db_config    = var.mssql_db_config
+  mssql_fw_rules     = var.mssql_fw_rules
 
   #SonarQube ACI Container/Group
   aci_group_config             = var.aci_group_config

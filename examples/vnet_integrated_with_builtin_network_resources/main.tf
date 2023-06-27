@@ -35,7 +35,7 @@ resource "azurerm_resource_group" "sonarqube_rg" {
 }
 
 ##################################################
-# MODULE TO TEST                                 #
+# MODULE                                         #
 ##################################################
 module "sonarcube-aci-internal" {
   source = "../.."
@@ -53,8 +53,8 @@ module "sonarcube-aci-internal" {
   subnet_config               = var.subnet_config
   subnet_config_delegated_aci = var.subnet_config_delegated_aci
   private_dns_zones           = var.private_dns_zones
-  resource_subnet_name        = "${var.resource_subnet_name}-${random_integer.number.result}"
-  delegated_subnet_name       = "${delegated_subnet_name}-${random_integer.number.result}"
+  resource_subnet_name        = var.resource_subnet_name
+  delegated_subnet_name       = var.delegated_subnet_name
 
   #KeyVault
   kv_config                        = var.kv_config
