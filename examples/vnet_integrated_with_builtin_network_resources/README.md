@@ -8,7 +8,7 @@ See **[VNET integrated deployment - networking resources deployed separately](ht
 For an example of how to create the required **networking prerequisites** separately to the **SonarQube instance** by setting the parameter: `"var.create_networking_prereqs = false"`.  
 
 See **[VNET integrated deployment - existing network resources](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_existing_network_resources):**  
-For an example on how to create and integrate the SonarQube instance on exisiting network resources by setting the parameter: `"create_networking_prereqs = false"`.  
+For an example on how to create and integrate the SonarQube instance on existing network resources by setting the parameter: `"create_networking_prereqs = false"`.  
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
