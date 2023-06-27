@@ -14,7 +14,7 @@ variable "tags" {
   type = map(string)
   default = {
     Terraform   = "True"
-    Description = "Sonarqube Internal Network."
+    Description = "Sonarqube Private Networking Resource."
     Author      = "Marcel Lupo"
     GitHub      = "https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal"
   }

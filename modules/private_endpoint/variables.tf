@@ -1,6 +1,7 @@
 variable "resource_group_name" {
   type        = string
-  description = "The name of the Resource Group where the resources will be created."
+  description = "The name of the Resource Group where the private endpoint resource will be created."
+  nullable    = false
 }
 
 variable "location" {
