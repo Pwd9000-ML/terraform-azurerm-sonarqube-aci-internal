@@ -61,6 +61,10 @@ When logging into the SonarQube instance for the first time, use the default cre
 
 ![image.png](https://raw.githubusercontent.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/master/assets/login.png)  
 
+if the container group is restarted or powered down/up, data is persisted in the Azure SQL database and Azure File Share.  
+
+Enjoy!
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
