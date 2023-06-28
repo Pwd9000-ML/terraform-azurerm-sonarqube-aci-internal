@@ -6,13 +6,13 @@
 
 ## Description
 
-Terraform Registry module for setting up an (internal/private VNET integrated) AZURE hosted SonarQube ACI instance including private endpointed persistent PaaS Database (Azure SQL), PaaS File Share (Azure Files) and custom locsal domain using reverse proxy (Caddy) sidecar container with self-signed generated certificate.
-
-See **[VNET integrated deployment - networking resources deployed (Built-in)](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_builtin_network_resources):**  
-For an example of how to create the required **networking prerequisites** and **SonarQube instance** in one module by setting the parameter: `"var.create_networking_prereqs = true"`.  
+Terraform Registry module for setting up an (internal/private VNET integrated) AZURE hosted SonarQube ACI instance including private endpointed persistent PaaS Database (Azure SQL), PaaS File Share (Azure Files) and custom local domain using reverse proxy (Caddy) sidecar container with self-signed generated certificate.
 
 See **[VNET integrated deployment - networking resources deployed separately](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_deploy_network_resources):**  
 For an example of how to create the required **networking prerequisites** separately to the **SonarQube instance** by setting the parameter: `"var.create_networking_prereqs = false"`.  
+
+See **[VNET integrated deployment - networking resources deployed (Built-in)](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_builtin_network_resources):**  
+For an example of how to create the required **networking prerequisites** and **SonarQube instance** in one module by setting the parameter: `"var.create_networking_prereqs = true"`.  
 
 See **[VNET integrated deployment - existing network resources](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_existing_network_resources):**  
 For an example on how to create and integrate the SonarQube instance on existing network resources by setting the parameter: `"create_networking_prereqs = false"`.
@@ -21,7 +21,8 @@ This module is published on the **[Public Terraform Registry - sonarqube-aci-int
 
 ## Network prerequisites
 
-The following networking resources are required to be created before deploying the SonarQube instance:
+The following networking resources are required to be created before deploying the SonarQube instance:  
+
 - **Virtual Network** (VNET)
 - **Private DNS Zones** (Private DNS Zones for privatelink resources `[Keyvault, MsSQL and File Storage]`, and a custom `[local]` domain)
 
@@ -41,14 +42,14 @@ After the **SonarQube** instance is deployed, the **SonarQube** instance will be
 
 ## SonarQube instance
 
-The following resources are deployed as part of the SonarQube instance:
-- **Azure Container Group** cntaining the SonarQube ACI and Caddy sidecar ACI with a **private IP** on the **delegated-subnet** of the VNET.  
+The following resources are deployed as part of the SonarQube instance:  
+
+- **Azure Container Group** containing the SonarQube ACI and Caddy sidecar ACI with a **private IP** on the **delegated-subnet** of the VNET.  
 - **Azure SQL Database** (PaaS) with a **private endpoint** on the **resources subnet** of the VNET.  
 - **Azure File Share** (PaaS) with a **private endpoint** on the **resources subnet** of the VNET.  
 - **Azure Key Vault** (PaaS) with a **private endpoint** on the **resources subnet** of the VNET.  
 
 ![image.png](https://raw.githubusercontent.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/master/assets/resources.png)
-
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
