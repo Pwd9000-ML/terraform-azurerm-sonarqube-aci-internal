@@ -17,6 +17,8 @@ For an example of how to create the required **networking prerequisites** and **
 See **[VNET integrated deployment - existing network resources](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_existing_network_resources):**  
 For an example on how to create and integrate the SonarQube instance on existing network resources by setting the parameter: `"create_networking_prereqs = false"`.
 
+Also see this module for creating a public instance of SonarQube using a Let's Encrypt Certificate. [Module: Sonarqube Azure Container Instance (+ Automatic SSL)](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci).  
+
 This module is published on the **[Public Terraform Registry - sonarqube-aci-internal](https://registry.terraform.io/modules/Pwd9000-ML/sonarqube-aci-internal/azurerm/latest)**  
 
 ## Network prerequisites
