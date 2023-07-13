@@ -30,7 +30,7 @@ resource "azurerm_resource_group" "sonarqube_rg" {
 # MODULE TO TEST                                 #
 ##################################################
 module "sonarcube-aci-internal" {
-  source = "Pwd9000-ML/sonarqube-aci-internal/azurerm"
+  source  = "Pwd9000-ML/sonarqube-aci-internal/azurerm"
   version = ">= 1.1.0"
 
   #Required

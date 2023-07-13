@@ -96,7 +96,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnet-link" {
 # MODULE                                         #
 ##################################################
 module "sonarcube-aci-internal" {
-  source = "Pwd9000-ML/sonarqube-aci-internal/azurerm"
+  source  = "Pwd9000-ML/sonarqube-aci-internal/azurerm"
   version = ">= 1.1.0"
 
   #Required
