@@ -38,7 +38,8 @@ resource "azurerm_resource_group" "sonarqube_rg" {
 # MODULE                                         #
 ##################################################
 module "sonarcube-aci-internal" {
-  source = "../.."
+  source = "Pwd9000-ML/sonarqube-aci-internal/azurerm"
+  version = ">= 1.1.0"
 
   #Required
   resource_group_name         = azurerm_resource_group.sonarqube_rg.name

@@ -10,6 +10,26 @@ For an example of how to create the required **networking prerequisites** separa
 See **[VNET integrated deployment - existing network resources](https://github.com/Pwd9000-ML/terraform-azurerm-sonarqube-aci-internal/tree/master/examples/vnet_integrated_with_existing_network_resources):**  
 For an example on how to create and integrate the SonarQube instance on existing network resources by setting the parameter: `"create_networking_prereqs = false"`.
 
+## Usage
+
+1. Clone or copy the files in this path to a local directory and open a command prompt.
+2. Amend the .tf file and .tfvars file with desired variables.
+3. Log into azure using CLI "az login".
+4. **BUILD:**
+
+    ```HCL
+    terraform init
+    terraform plan -out deploy.tfplan
+    terraform apply deploy.tfplan
+    ```
+
+5. **DESTROY:**
+
+    ```HCL
+    terraform plan -destroy -out destroy.tfplan
+    terraform apply destroy.tfplan
+    ```  
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -26,7 +46,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_sonarcube-aci-internal"></a> [sonarcube-aci-internal](#module\_sonarcube-aci-internal) | ../.. | n/a |
+| <a name="module_sonarcube-aci-internal"></a> [sonarcube-aci-internal](#module\_sonarcube-aci-internal) | Pwd9000-ML/sonarqube-aci-internal/azurerm | >= 1.1.0 |
 
 ## Resources
 
