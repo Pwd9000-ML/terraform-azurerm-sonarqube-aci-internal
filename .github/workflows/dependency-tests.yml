@@ -40,7 +40,6 @@ jobs:
           arm_tenant_id: ${{ secrets.ARM_TENANT_ID }}             ## (Required - Dependabot Secrets) ARM Tenant ID
           github_token: ${{ secrets.GITHUB_TOKEN }} ## (Required) Needed to comment output on PR's. ${{ secrets.GITHUB_TOKEN }} already has permissions.
 
-
 ##### If dependency tests are successful update all readme documentation using terraform-docs #####
   update_docs:
     needs: dependabot_plan_apply_destroy
