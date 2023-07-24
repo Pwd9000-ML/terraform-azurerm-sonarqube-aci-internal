@@ -197,7 +197,7 @@ variable "storage_firewall_allowed_ips" {
 ###Azure SQL Server###
 variable "pass_length" {
   type        = number
-  default     = 24
+  default     = 36
   description = "Password length for sql admin creds. (Stored in sonarqube key vault)"
 }
 
