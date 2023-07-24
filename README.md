@@ -70,14 +70,14 @@ Enjoy!
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.2 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.65.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.3 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.66.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.65.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.66.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
@@ -133,7 +133,7 @@ Enjoy!
 | <a name="input_mssql_db_config"></a> [mssql\_db\_config](#input\_mssql\_db\_config) | MSSQL database configuration object to create persistent azure SQL db for sonarqube aci. | <pre>object({<br>    db_name                     = string<br>    collation                   = string<br>    create_mode                 = string<br>    license_type                = string<br>    max_size_gb                 = number<br>    min_capacity                = number<br>    auto_pause_delay_in_minutes = number<br>    read_scale                  = bool<br>    sku_name                    = string<br>    storage_account_type        = string<br>    zone_redundant              = bool<br>    point_in_time_restore_days  = number<br>    backup_interval_in_hours    = number<br>  })</pre> | <pre>{<br>  "auto_pause_delay_in_minutes": 60,<br>  "backup_interval_in_hours": 24,<br>  "collation": "SQL_Latin1_General_CP1_CS_AS",<br>  "create_mode": "Default",<br>  "db_name": "sonarqubemssqldb9000",<br>  "license_type": null,<br>  "max_size_gb": 128,<br>  "min_capacity": 1,<br>  "point_in_time_restore_days": 7,<br>  "read_scale": false,<br>  "sku_name": "GP_S_Gen5_2",<br>  "storage_account_type": "Zone",<br>  "zone_redundant": false<br>}</pre> | no |
 | <a name="input_mssql_fw_rules"></a> [mssql\_fw\_rules](#input\_mssql\_fw\_rules) | List of SQL firewall rules in format: [[rule1, startIP, endIP],[rule2, startIP, endIP]] etc. | `list(list(string))` | <pre>[<br>  [<br>    "AllowAll",<br>    "0.0.0.0",<br>    "0.0.0.0"<br>  ]<br>]</pre> | no |
 | <a name="input_network_resource_group_name"></a> [network\_resource\_group\_name](#input\_network\_resource\_group\_name) | Name of the resource group where networking resources are hosted (if different from resource group hosting ACI resources). | `string` | n/a | yes |
-| <a name="input_pass_length"></a> [pass\_length](#input\_pass\_length) | Password length for sql admin creds. (Stored in sonarqube key vault) | `number` | `24` | no |
+| <a name="input_pass_length"></a> [pass\_length](#input\_pass\_length) | Password length for sql admin creds. (Stored in sonarqube key vault) | `number` | `36` | no |
 | <a name="input_private_dns_zones"></a> [private\_dns\_zones](#input\_private\_dns\_zones) | Private DNS zones to create and link to VNET. | `list(string)` | `null` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group where resources will be hosted. | `string` | n/a | yes |
 | <a name="input_resource_subnet_name"></a> [resource\_subnet\_name](#input\_resource\_subnet\_name) | The name for the resource subnet, used in data source to get subnet ID. | `string` | n/a | yes |
