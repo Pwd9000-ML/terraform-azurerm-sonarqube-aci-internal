@@ -151,22 +151,22 @@ variable "keyvault_firewall_allowed_ips" {
 ## Storage - File ##
 variable "sa_config" {
   type = object({
-    name                      = string
-    account_kind              = string
-    account_tier              = string
-    account_replication_type  = string
-    access_tier               = string
-    min_tls_version           = string
-    is_hns_enabled            = bool
+    name                     = string
+    account_kind             = string
+    account_tier             = string
+    account_replication_type = string
+    access_tier              = string
+    min_tls_version          = string
+    is_hns_enabled           = bool
   })
   default = {
-    name                      = "sonarqubesa9000"
-    account_kind              = "StorageV2"
-    account_tier              = "Standard"
-    account_replication_type  = "LRS"
-    access_tier               = "Hot"
-    min_tls_version           = "TLS1_2"
-    is_hns_enabled            = false
+    name                     = "sonarqubesa9000"
+    account_kind             = "StorageV2"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    access_tier              = "Hot"
+    min_tls_version          = "TLS1_2"
+    is_hns_enabled           = false
   }
   description = "Storage configuration object to create persistent azure file shares for sonarqube aci."
   nullable    = false

@@ -76,13 +76,13 @@ resource "azurerm_storage_account" "sonarqube_sa" {
   resource_group_name = var.resource_group_name
   location            = var.location
   #values from variable sa_config object
-  name                      = lower(substr(var.sa_config.name, 0, 24))
-  account_kind              = var.sa_config.account_kind
-  account_tier              = var.sa_config.account_tier
-  account_replication_type  = var.sa_config.account_replication_type
-  access_tier               = var.sa_config.access_tier
-  min_tls_version           = var.sa_config.min_tls_version
-  is_hns_enabled            = var.sa_config.is_hns_enabled
+  name                     = lower(substr(var.sa_config.name, 0, 24))
+  account_kind             = var.sa_config.account_kind
+  account_tier             = var.sa_config.account_tier
+  account_replication_type = var.sa_config.account_replication_type
+  access_tier              = var.sa_config.access_tier
+  min_tls_version          = var.sa_config.min_tls_version
+  is_hns_enabled           = var.sa_config.is_hns_enabled
   dynamic "network_rules" {
     for_each = local.sa_net_rules
     content {
