@@ -18,7 +18,7 @@ resource "azurerm_subnet" "resource_subnets" {
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
   address_prefixes                              = var.subnet_config[count.index].subnet_address_space
   service_endpoints                             = var.subnet_config[count.index].service_endpoints
-  private_endpoint_network_policies_enabled     = var.subnet_config[count.index].private_endpoint_network_policies_enabled
+  private_endpoint_network_policies     = var.subnet_config[count.index].private_endpoint_network_policies_enabled
   private_link_service_network_policies_enabled = var.subnet_config[count.index].private_link_service_network_policies_enabled
   depends_on                                    = [azurerm_virtual_network.sonarqube_vnet]
 }
@@ -31,7 +31,7 @@ resource "azurerm_subnet" "sonarqube_sub_del" {
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
   address_prefixes                              = var.subnet_config_delegated_aci[count.index].subnet_address_space
   service_endpoints                             = var.subnet_config_delegated_aci[count.index].service_endpoints
-  private_endpoint_network_policies_enabled     = var.subnet_config_delegated_aci[count.index].private_endpoint_network_policies_enabled
+  private_endpoint_network_policies     = var.subnet_config_delegated_aci[count.index].private_endpoint_network_policies_enabled
   private_link_service_network_policies_enabled = var.subnet_config_delegated_aci[count.index].private_link_service_network_policies_enabled
   delegation {
     name = var.subnet_config_delegated_aci[count.index].delegation_name
