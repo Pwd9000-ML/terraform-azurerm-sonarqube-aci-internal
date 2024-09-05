@@ -132,7 +132,7 @@ module "sonarcube-aci-internal" {
 
   sonar_config = {
     container_name                  = "sonarqube-server"
-    container_image                 = "sonarqube:lts-community" #Check for more versions/tags here: https://hub.docker.com/_/sonarqube
+    container_image                 = "ghcr.io/metrostar/quartz/ironbank/big-bang/sonarqube-9:9.9.4-community"
     container_cpu                   = 2
     container_memory                = 8
     container_environment_variables = null
@@ -141,7 +141,7 @@ module "sonarcube-aci-internal" {
 
   caddy_config = {
     container_name                  = "caddy-reverse-proxy"
-    container_image                 = "caddy:latest" #Check for more versions/tags here: https://hub.docker.com/_/caddy
+    container_image                 = "ghcr.io/sashkab/docker-caddy2/docker-caddy2:latest"
     container_cpu                   = 1
     container_memory                = 1
     container_environment_variables = null
