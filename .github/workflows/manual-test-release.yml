@@ -27,7 +27,7 @@ jobs:
           tf_key: tf-mod-tests-aci-int        ## (Required) AZ backend - Specifies name that will be given to terraform state file and plan artifact (testing state)
           az_resource_group: Terraform-GitHub-Backend      ## (Required) AZ backend - AZURE Resource Group hosting terraform backend storage account
           az_storage_acc: tfgithubbackendsa   ## (Required) AZ backend - AZURE terraform backend storage account
-          az_container_name: gh-sonarqube-aci-int ## (Required) AZ backend - AZURE storage container hosting state files 
+          az_container_name: gh-sonarq-aci-int ## (Required) AZ backend - AZURE storage container hosting state files 
           arm_client_id: ${{ secrets.ARM_CLIENT_ID }}             ## (Required - Actions Secrets) ARM Client ID 
           arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}     ## (Required - Actions Secrets) ARM Client Secret
           arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }} ## (Required - Actions Secrets) ARM Subscription ID
