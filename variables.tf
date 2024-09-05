@@ -300,7 +300,7 @@ variable "sonar_config" {
   })
   default = {
     container_name                  = "sonarqube-server"
-    container_image                 = "ghcr.io/metrostar/quartz/ironbank/big-bang/sonarqube-9:9.9.4-community" 
+    container_image                 = "ghcr.io/metrostar/quartz/ironbank/big-bang/sonarqube-9:9.9.4-community"
     container_cpu                   = 2
     container_memory                = 8
     container_environment_variables = null
