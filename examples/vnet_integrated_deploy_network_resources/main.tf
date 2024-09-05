@@ -51,7 +51,7 @@ resource "azurerm_subnet" "resource_subnets" {
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
   address_prefixes                              = each.value.subnet_address_space
   service_endpoints                             = each.value.service_endpoints
-  private_endpoint_network_policies_enabled     = each.value.private_endpoint_network_policies_enabled
+  private_endpoint_network_policies             = each.value.private_endpoint_network_policies_enabled
   private_link_service_network_policies_enabled = each.value.private_link_service_network_policies_enabled
 }
 
@@ -63,7 +63,7 @@ resource "azurerm_subnet" "sonarqube_sub_del" {
   virtual_network_name                          = azurerm_virtual_network.sonarqube_vnet.name
   address_prefixes                              = each.value.subnet_address_space
   service_endpoints                             = each.value.service_endpoints
-  private_endpoint_network_policies_enabled     = each.value.private_endpoint_network_policies_enabled
+  private_endpoint_network_policies             = each.value.private_endpoint_network_policies_enabled
   private_link_service_network_policies_enabled = each.value.private_link_service_network_policies_enabled
   delegation {
     name = each.value.delegation_name

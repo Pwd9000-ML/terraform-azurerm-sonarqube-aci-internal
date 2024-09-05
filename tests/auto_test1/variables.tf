@@ -39,7 +39,7 @@ variable "subnet_config" {
     subnet_name                                   = string
     subnet_address_space                          = list(string)
     service_endpoints                             = list(string)
-    private_endpoint_network_policies_enabled     = bool
+    private_endpoint_network_policies_enabled     = string
     private_link_service_network_policies_enabled = bool
   }))
   default     = []
@@ -51,7 +51,7 @@ variable "subnet_config_delegated_aci" {
     subnet_name                                   = string
     subnet_address_space                          = list(string)
     service_endpoints                             = list(string)
-    private_endpoint_network_policies_enabled     = bool
+    private_endpoint_network_policies_enabled     = string
     private_link_service_network_policies_enabled = bool
     delegation_name                               = string
     delegation_service                            = string

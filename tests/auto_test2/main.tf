@@ -55,7 +55,7 @@ module "sonarcube-aci-internal" {
       subnet_name                                   = "sonarqube-resource-sub-${random_integer.number.result}"
       subnet_address_space                          = ["10.3.0.0/24"]
       service_endpoints                             = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.KeyVault"]
-      private_endpoint_network_policies_enabled     = false
+      private_endpoint_network_policies_enabled     = "Enabled"
       private_link_service_network_policies_enabled = false
     }
   ]
@@ -64,7 +64,7 @@ module "sonarcube-aci-internal" {
       subnet_name                                   = "sonarqube-delegated-sub-${random_integer.number.result}"
       subnet_address_space                          = ["10.3.1.0/24"]
       service_endpoints                             = []
-      private_endpoint_network_policies_enabled     = false
+      private_endpoint_network_policies_enabled     = "Enabled"
       private_link_service_network_policies_enabled = false
       delegation_name                               = "aci-sub-delegation"
       delegation_service                            = "Microsoft.ContainerInstance/containerGroups"
